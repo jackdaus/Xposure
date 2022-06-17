@@ -19,4 +19,22 @@
     <PackageReference Include="StereoKit" Version="0.3.6" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Assets\Spider\scene.bin">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\Spider\scene.gltf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\Spider\textures\Spider_baseColor.jpeg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\Spider\textures\Spider_Eye_normal.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\Spider\textures\Spider_Fur_baseColor.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
