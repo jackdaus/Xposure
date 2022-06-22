@@ -12,12 +12,15 @@ namespace StereoKitApp
         private static Asset instance = null;
         private static readonly object padlock = new object();
         
-        public Model SpiderModel1 { get; }
-        //public Model SpiderModel2 { get; }
+        public Model SpiderModelA { get; }
+        public Model SpiderModelB { get; }
+        public Model SpiderModelC { get; }
 
         Asset()
         {
-            SpiderModel1 = Model.FromFile("spider/scene.gltf");
+            SpiderModelA = Model.FromFile("spiderA.glb");
+            SpiderModelB = Model.FromFile("spiderB.glb");
+            SpiderModelC = Model.FromFile("spiderC/scene.gltf");
         }
 
         public static Asset Instance

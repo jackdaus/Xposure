@@ -40,13 +40,26 @@ namespace StereoKitApp
             spiderModels.Add(spiderModel);
 
             // initialize level 3
-            spiderModel = Asset.Instance.SpiderModel1.Copy();           // call Copy() so we can play different animations for each spider instance
-            spiderModel.RootNode.ModelTransform *= Matrix.S(0.003f);    // Scale the spider
+            spiderModel = Asset.Instance.SpiderModelA;
+            spiderModel.RootNode.ModelTransform *= Matrix.S(0.15f);
+            spiderModels.Add(spiderModel);
+            lastWalkingChange = DateTime.Now;
+
+            // initialize level 4
+            spiderModel = Asset.Instance.SpiderModelB;
+            spiderModel.RootNode.ModelTransform *= Matrix.S(0.4f);
             spiderModel.PlayAnim("walk_ani_vor", AnimMode.Loop);
             spiderModels.Add(spiderModel);
             lastWalkingChange = DateTime.Now;
 
-            level = 3;
+            // initialize level 5
+            spiderModel = Asset.Instance.SpiderModelC.Copy(); // call Copy() so we can play different animations for each spider instance
+            spiderModel.RootNode.ModelTransform *= Matrix.S(0.003f);
+            spiderModel.PlayAnim("walk_ani_vor", AnimMode.Loop);
+            spiderModels.Add(spiderModel);
+            lastWalkingChange = DateTime.Now;
+
+            level = 5;
             activeModel = spiderModels[level];
         }
 
@@ -67,8 +80,9 @@ namespace StereoKitApp
             var timeSinceLastChange = DateTime.Now - lastWalkingChange;
             if (_random.Next(300) == 1 && timeSinceLastChange.TotalSeconds > 3)
             {
-                // change animation for level 3
-                if (level == 3)
+                // change animation for level 5
+                // TODO have a better way to check this
+                if (level == 5)
                 {
                     if (isWalking)
                         activeModel.PlayAnim("warte_pose", AnimMode.Loop);
