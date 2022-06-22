@@ -10,44 +10,58 @@ namespace StereoKitApp
 			displayPreference = DisplayMode.MixedReality
 		};
 
-		Pose  cubePose = new Pose(0, -1.5f, -0.5f, Quat.Identity);
-		Model cube;
 		Matrix   floorTransform = Matrix.TS(new Vec3(0, -1.5f, 0), new Vec3(30, 0.1f, 30));
 		Material floorMaterial;
 
-		Model spider;
-		// Shrink the spider
-		Matrix spiderTransform = Matrix.S(0.01f);
+		Spider mySpider;
+        Spider mySpider2;
 
-		public void Init()
+        public void Init()
 		{
 			// Create assets used by the app
-			cube = Model.FromMesh(
-				Mesh.GenerateRoundedCube(Vec3.One * 0.1f, 0.02f),
-				Default.MaterialUI);
-
 			floorMaterial = new Material(Shader.FromFile("floor.hlsl"));
 			floorMaterial.Transparency = Transparency.Blend;
 
-			spider = Model.FromFile("spider/scene.gltf");
-			spider.RootNode.ModelTransform *= spiderTransform;
-
-
-			// log the animations available
-			foreach (Anim anim in spider.Anims)
-				Log.Info($"Animation: {anim.Name} {anim.Duration}s");
-
-			spider.PlayAnim("walk_ani_vor", AnimMode.Loop);
-		}
+			mySpider = new Spider();
+            mySpider2 = new Spider();
+            mySpider2.setPosition(0.5f, -1.45f, -1);
+        }
 
 		public void Step()
 		{
 			if (SK.System.displayType == Display.Opaque)
 				Default.MeshCube.Draw(floorMaterial, floorTransform);
 
-			UI.Handle("Cube", ref cubePose, cube.Bounds);
-			cube.Draw(cubePose.ToMatrix());
-			spider.Draw(cubePose.ToMatrix());
+			drawGlobalCoordinates();
+			mySpider.Step();
+            mySpider2.Step();
+        }
+
+		/// <summary>
+		/// Draw the unit coordinates at the origin. Useful for understanding your current orientation while debugging.
+		/// </summary>
+		private void drawGlobalCoordinates()
+		{
+			Lines.Add(
+				new Vec3(0, 0, 0),
+				new Vec3(1, 0, 0),
+				Color.Black,
+				Color.HSV(0, 1, 1),
+				1 * U.cm);
+
+			Lines.Add(
+				new Vec3(0, 0, 0),
+				new Vec3(0, 1, 0),
+				Color.Black,
+				Color.HSV(1f / 3f, 1, 1),
+				1 * U.cm);
+
+			Lines.Add(
+				new Vec3(0, 0, 0),
+				new Vec3(0, 0, 1),
+				Color.Black,
+				Color.HSV(2f / 3f, 1, 1),
+				1 * U.cm);
 		}
 	}
 }
