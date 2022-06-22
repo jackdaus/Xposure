@@ -40,8 +40,8 @@ namespace StereoKitApp
             spiderModels.Add(spiderModel);
 
             // initialize level 3
-            spiderModel = Model.FromFile("spider/scene.gltf");
-            spiderModel.RootNode.ModelTransform *= Matrix.S(0.003f); // Scale the spider
+            spiderModel = Asset.Instance.SpiderModel1.Copy();           // call Copy() so we can play different animations for each spider instance
+            spiderModel.RootNode.ModelTransform *= Matrix.S(0.003f);    // Scale the spider
             spiderModel.PlayAnim("walk_ani_vor", AnimMode.Loop);
             spiderModels.Add(spiderModel);
             lastWalkingChange = DateTime.Now;
@@ -82,6 +82,24 @@ namespace StereoKitApp
         }
 
         /// <summary>
+        /// Get the current level of this spider
+        /// </summary>
+        /// <returns></returns>
+        public int getCurrentLevel()
+        {
+            return level;
+        }
+
+        /// <summary>
+        /// Get the maximum level
+        /// </summary>
+        /// <returns></returns>
+        public int getMaxLevel()
+        {
+            return spiderModels.Count - 1;
+        }
+
+        /// <summary>
         /// Set the current level of intensity for the spider
         /// </summary>
         /// <param name="level"></param>
@@ -99,22 +117,11 @@ namespace StereoKitApp
             activeModel = spiderModels[level];
         }
 
-        /// <summary>
-        /// Get the current level of this spider
-        /// </summary>
-        /// <returns></returns>
-        public int getCurrentLevel()
+        public void setPosition(float x, float y, float z)
         {
-            return level;
-        }
-
-        /// <summary>
-        /// Get the maximum level
-        /// </summary>
-        /// <returns></returns>
-        public int getMaxLevel()
-        {
-            return spiderModels.Count - 1;
+            cubePose.position.x = x;
+            cubePose.position.y = y;
+            cubePose.position.z = z;
         }
     }
 }

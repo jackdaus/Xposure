@@ -14,15 +14,18 @@ namespace StereoKitApp
 		Material floorMaterial;
 
 		Spider mySpider;
+        Spider mySpider2;
 
-		public void Init()
+        public void Init()
 		{
 			// Create assets used by the app
 			floorMaterial = new Material(Shader.FromFile("floor.hlsl"));
 			floorMaterial.Transparency = Transparency.Blend;
 
 			mySpider = new Spider();
-		}
+            mySpider2 = new Spider();
+            mySpider2.setPosition(0.5f, -1.45f, -1);
+        }
 
 		public void Step()
 		{
@@ -31,7 +34,8 @@ namespace StereoKitApp
 
 			drawGlobalCoordinates();
 			mySpider.Step();
-		}
+            mySpider2.Step();
+        }
 
 		/// <summary>
 		/// Draw the unit coordinates at the origin. Useful for understanding your current orientation while debugging.
