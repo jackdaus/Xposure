@@ -1,4 +1,5 @@
 ﻿using StereoKit;
+using System;
 
 namespace StereoKitApp
 {
@@ -10,22 +11,30 @@ namespace StereoKitApp
 			displayPreference = DisplayMode.MixedReality
 		};
 
-		Matrix   floorTransform = Matrix.TS(new Vec3(0, -1.5f, 0), new Vec3(30, 0.1f, 30));
+		Matrix floorTransform;
 		Material floorMaterial;
 		LevelManager lvlManager = new LevelManager(new Pose(0, 0, 0, Quat.LookDir(0, 0, 0)), new Vec2(10, 0) * U.cm);
 		Spider mySpider;
         Spider mySpider2;
 
-        public void Init()
+		Pose menuPose = new Pose(0.4f, 0, -0.4f, Quat.LookDir(-1, 0, 1));
+		int currentLevel = 0;
+		const int MAX_LEVEL = Spider.MAX_LEVEL;
+
+		public void Init()
 		{
+			float floorHeight = World.HasBounds ? World.BoundsPose.position.y : -1.5f;
+
 			// Create assets used by the app
+			floorTransform = Matrix.TS(new Vec3(0, floorHeight, 0), new Vec3(30, 0.1f, 30));
 			floorMaterial = new Material(Shader.FromFile("floor.hlsl"));
 			floorMaterial.Transparency = Transparency.Blend;
 
-
-			mySpider = new Spider();
-            mySpider2 = new Spider();
-            mySpider2.setPosition(0.5f, -1.45f, -1);
+			if (World.HasBounds)
+            {
+                Log.Info("Has bounds!");
+                Log.Info($"World pose: ({World.BoundsPose.position.x}, {World.BoundsPose.position.y}, {World.BoundsPose.position.z})");
+			}
         }
 
 		public void Step()
@@ -36,9 +45,7 @@ namespace StereoKitApp
 			lvlManager.Step();
 
 			drawGlobalCoordinates();
-			mySpider.Step();
-            mySpider2.Step();
-        }
+		}
 
 		/// <summary>
 		/// Draw the unit coordinates at the origin. Useful for understanding your current orientation while debugging.
