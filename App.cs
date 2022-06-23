@@ -12,7 +12,7 @@ namespace StereoKitApp
 
 		Matrix   floorTransform = Matrix.TS(new Vec3(0, -1.5f, 0), new Vec3(30, 0.1f, 30));
 		Material floorMaterial;
-
+		LevelManager lvlManager = new LevelManager(new Pose(0, 0, 0, Quat.LookDir(0, 0, 0)), new Vec2(10, 0) * U.cm);
 		Spider mySpider;
         Spider mySpider2;
 
@@ -21,6 +21,7 @@ namespace StereoKitApp
 			// Create assets used by the app
 			floorMaterial = new Material(Shader.FromFile("floor.hlsl"));
 			floorMaterial.Transparency = Transparency.Blend;
+
 
 			mySpider = new Spider();
             mySpider2 = new Spider();
@@ -31,6 +32,8 @@ namespace StereoKitApp
 		{
 			if (SK.System.displayType == Display.Opaque)
 				Default.MeshCube.Draw(floorMaterial, floorTransform);
+
+			lvlManager.Step();
 
 			drawGlobalCoordinates();
 			mySpider.Step();
@@ -63,5 +66,6 @@ namespace StereoKitApp
 				Color.HSV(2f / 3f, 1, 1),
 				1 * U.cm);
 		}
+
 	}
 }
