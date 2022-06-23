@@ -13,7 +13,7 @@ namespace StereoKitApp
 
 		Matrix floorTransform;
 		Material floorMaterial;
-
+		LevelManager lvlManager = new LevelManager(new Pose(0, 0, 0, Quat.LookDir(0, 0, 0)), new Vec2(10, 0) * U.cm);
 		Spider mySpider;
         Spider mySpider2;
 
@@ -30,12 +30,6 @@ namespace StereoKitApp
 			floorMaterial = new Material(Shader.FromFile("floor.hlsl"));
 			floorMaterial.Transparency = Transparency.Blend;
 
-			mySpider = new Spider();
-            mySpider.SetPosition(-0.5f, floorHeight + 0.05f, -2); ;
-
-            mySpider2 = new Spider();
-            mySpider2.SetPosition(0.5f, floorHeight + 0.05f, -2);
-
 			if (World.HasBounds)
             {
                 Log.Info("Has bounds!");
@@ -47,28 +41,10 @@ namespace StereoKitApp
 		{
 			if (SK.System.displayType == Display.Opaque)
 				Default.MeshCube.Draw(floorMaterial, floorTransform);
-			//drawGlobalCoordinates();
-			mySpider.Step();
-            mySpider2.Step();
 
-			UI.WindowBegin("Main Menu", ref menuPose);
-			UI.Label($"Level {currentLevel} out of {MAX_LEVEL}");
-			
-			if (UI.Button("Down") && currentLevel > 0)
-            {
-				currentLevel--;
-				mySpider.Level = currentLevel;
-				mySpider2.Level = currentLevel;
-			}
-			UI.SameLine();
-			if (UI.Button("Up") && currentLevel < MAX_LEVEL)
-            {
-				currentLevel++;
-				mySpider.Level = currentLevel;
-				mySpider2.Level = currentLevel;
-			}
+			lvlManager.Step();
 
-			UI.WindowEnd();
+			drawGlobalCoordinates();
 		}
 
 		/// <summary>
@@ -97,5 +73,6 @@ namespace StereoKitApp
 				Color.HSV(2f / 3f, 1, 1),
 				1 * U.cm);
 		}
+
 	}
 }

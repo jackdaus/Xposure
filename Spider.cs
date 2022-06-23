@@ -137,9 +137,9 @@ namespace StereoKitApp
             if (_level == MAX_LEVEL)
             {
                 if (isWalking)
-                    activeModel.PlayAnim("warte_pose", AnimMode.Loop);
-                else
                     activeModel.PlayAnim("walk_ani_vor", AnimMode.Loop);
+                else
+                    activeModel.PlayAnim("warte_pose", AnimMode.Loop);
             }
         }
     }
