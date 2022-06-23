@@ -20,19 +20,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Assets\SpiderC\scene.bin">
+    <None Update="Assets\SpiderG\scene.bin">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Assets\SpiderC\scene.gltf">
+    <None Update="Assets\SpiderG\scene.gltf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Assets\SpiderC\textures\Spider_baseColor.jpeg">
+    <None Update="Assets\SpiderG\textures\Spider_baseColor.jpeg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Assets\SpiderC\textures\Spider_Eye_normal.png">
+    <None Update="Assets\SpiderG\textures\Spider_Eye_normal.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Assets\SpiderC\textures\Spider_Fur_baseColor.png">
+    <None Update="Assets\SpiderG\textures\Spider_Fur_baseColor.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

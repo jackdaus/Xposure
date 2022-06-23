@@ -6,19 +6,40 @@ namespace StereoKitApp
 {
     public class Spider
     {
-        // TODO use floor height for y coord
-        Pose cubePose = new Pose(0, -1.45f, -1f, Quat.Identity);
+        //public const int MAX_LEVEL = 9;
+        public const int MAX_LEVEL = 7;
+
+        Pose cubePose = new Pose(0, 0, 0, Quat.Identity);
         float rotateAngle = 0;
         Matrix translateMat = Matrix.T(0.5f, 0, 0);
         Model cube;
 
-        int level = 0;
         Model activeModel;
         List<Model> spiderModels = new List<Model>();
 
         private readonly Random _random = new Random();
         bool isWalking = true;
-        DateTime lastWalkingChange;
+        DateTime lastWalkingChange = DateTime.Now;
+
+        int _level = 0;
+        public int Level
+        {
+            get { return _level; }
+            set 
+            {
+                if (_level < 0)
+                    throw new ArgumentOutOfRangeException(nameof(Level), "The Level must be greater than or equal to 0");
+
+                if (_level + 1 > spiderModels.Count)
+                    throw new IndexOutOfRangeException($"The Level {_level} does not exist. The maximum Level is {spiderModels.Count - 1}");
+
+                _level = value;
+                activeModel = spiderModels[_level];
+
+                // toggle animation to sync model to the current animation state
+                toggleAnimation();
+            }
+        }
 
         public Spider()
         {
@@ -41,26 +62,42 @@ namespace StereoKitApp
 
             // initialize level 3
             spiderModel = Asset.Instance.SpiderModelA;
-            spiderModel.RootNode.ModelTransform *= Matrix.S(0.15f);
+            spiderModel.RootNode.ModelTransform *= Matrix.S(0.4f);
             spiderModels.Add(spiderModel);
-            lastWalkingChange = DateTime.Now;
 
             // initialize level 4
             spiderModel = Asset.Instance.SpiderModelB;
             spiderModel.RootNode.ModelTransform *= Matrix.S(0.4f);
-            spiderModel.PlayAnim("walk_ani_vor", AnimMode.Loop);
             spiderModels.Add(spiderModel);
-            lastWalkingChange = DateTime.Now;
 
-            // initialize level 5
-            spiderModel = Asset.Instance.SpiderModelC.Copy(); // call Copy() so we can play different animations for each spider instance
+            // TODO fix models
+            //// initialize level 5
+            //spiderModel = Asset.Instance.SpiderModelC;
+            //spiderModel.RootNode.ModelTransform *= Matrix.S(0.4f);
+            //spiderModels.Add(spiderModel);
+
+            //// initialize level 6
+            //spiderModel = Asset.Instance.SpiderModelD;
+            //spiderModel.RootNode.ModelTransform *= Matrix.S(0.4f);
+            //spiderModels.Add(spiderModel);
+
+            // initialize level 7
+            spiderModel = Asset.Instance.SpiderModelE;
+            spiderModel.RootNode.ModelTransform *= Matrix.S(0.4f);
+            spiderModels.Add(spiderModel);
+
+            // initialize level 8
+            spiderModel = Asset.Instance.SpiderModelF;
+            spiderModel.RootNode.ModelTransform *= Matrix.S(0.4f);
+            spiderModels.Add(spiderModel);
+
+            // initialize level 9
+            spiderModel = Asset.Instance.SpiderModelG.Copy(); // call Copy() so we can play different animations for each spider instance
             spiderModel.RootNode.ModelTransform *= Matrix.S(0.003f);
             spiderModel.PlayAnim("walk_ani_vor", AnimMode.Loop);
             spiderModels.Add(spiderModel);
-            lastWalkingChange = DateTime.Now;
 
-            level = 5;
-            activeModel = spiderModels[level];
+            activeModel = spiderModels[_level];
         }
 
         public void Step()
@@ -80,62 +117,30 @@ namespace StereoKitApp
             var timeSinceLastChange = DateTime.Now - lastWalkingChange;
             if (_random.Next(300) == 1 && timeSinceLastChange.TotalSeconds > 3)
             {
-                // change animation for level 5
-                // TODO have a better way to check this
-                if (level == 5)
-                {
-                    if (isWalking)
-                        activeModel.PlayAnim("warte_pose", AnimMode.Loop);
-                    else
-                        activeModel.PlayAnim("walk_ani_vor", AnimMode.Loop);
-                }
 
                 isWalking = !isWalking;
+                toggleAnimation();
                 lastWalkingChange = DateTime.Now;
             }
         }
 
-        /// <summary>
-        /// Get the current level of this spider
-        /// </summary>
-        /// <returns></returns>
-        public int getCurrentLevel()
-        {
-            return level;
-        }
-
-        /// <summary>
-        /// Get the maximum level
-        /// </summary>
-        /// <returns></returns>
-        public int getMaxLevel()
-        {
-            return spiderModels.Count - 1;
-        }
-
-        /// <summary>
-        /// Set the current level of intensity for the spider
-        /// </summary>
-        /// <param name="level"></param>
-        /// <exception cref="ArgumentOutOfRangeException"></exception>
-        /// <exception cref="IndexOutOfRangeException"></exception>
-        public void setLevel(int level)
-        {
-            if (level < 0)
-                throw new ArgumentOutOfRangeException(nameof(level), "The level must be greater than or equal to 0");
-
-            if (level + 1 > spiderModels.Count)
-                throw new IndexOutOfRangeException($"The level {level} does not exist. The maximum level is {spiderModels.Count - 1}");
-
-            this.level = level;
-            activeModel = spiderModels[level];
-        }
-
-        public void setPosition(float x, float y, float z)
+        public void SetPosition(float x, float y, float z)
         {
             cubePose.position.x = x;
             cubePose.position.y = y;
             cubePose.position.z = z;
+        }
+
+        private void toggleAnimation()
+        {
+            // last level has animations
+            if (_level == MAX_LEVEL)
+            {
+                if (isWalking)
+                    activeModel.PlayAnim("warte_pose", AnimMode.Loop);
+                else
+                    activeModel.PlayAnim("walk_ani_vor", AnimMode.Loop);
+            }
         }
     }
 }
