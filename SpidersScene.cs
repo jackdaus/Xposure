@@ -14,24 +14,24 @@ namespace StereoKitApp
         {
         }
 
-        public void setCurrentLevel(int level)
-        {
-            this.currentLevel = level;
-        }
-        public void init(int startingLevel)
+        public void Init(int startingLevel)
         {
             spiders.Clear();
             Spider spider = new Spider();
-            spider.SetPosition(0.5f, World.HasBounds ? World.BoundsPose.position.y : -1.5f + 0.05f, -2);
+            spider.SetPosition(0f, Util.FloorHeight, -2);
             spider.Level = startingLevel;
             spiders.Add(spider);
         }
+
         public void Step() 
         {
-            foreach (var spider in spiders)
-            {
-                spider.Step();
-            }
+            spiders.ForEach(sp => sp.Step());
+        }
+
+        public void SetCurrentLevel(int level)
+        {
+            this.currentLevel = level;
+            spiders.ForEach(sp => sp.Level = level);
         }
     }
 }

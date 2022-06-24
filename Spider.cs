@@ -57,17 +57,17 @@ namespace StereoKitApp
 
             // initialize level 2
             spiderModel = Model.FromMesh(Mesh.GenerateSphere(0.05f), Default.MaterialUI);
-            spiderModel.RootNode.AddChild("test", Matrix.T(0, 0, -0.05f), Mesh.GenerateSphere(0.08f), Default.MaterialUI);
+            spiderModel.RootNode.AddChild("abs", Matrix.T(0, 0, -0.05f), Mesh.GenerateSphere(0.08f), Default.MaterialUI);
             spiderModels.Add(spiderModel);
 
             // initialize level 3
-            spiderModel = Asset.Instance.SpiderModelA;
-            spiderModel.RootNode.ModelTransform *= Matrix.S(0.4f);
+            spiderModel = Asset.Instance.SpiderModelA.Copy();
+            spiderModel.RootNode.ModelTransform *= Matrix.S(0.3f);
             spiderModels.Add(spiderModel);
 
             // initialize level 4
-            spiderModel = Asset.Instance.SpiderModelB;
-            spiderModel.RootNode.ModelTransform *= Matrix.S(0.4f);
+            spiderModel = Asset.Instance.SpiderModelB.Copy();
+            spiderModel.RootNode.ModelTransform *= Matrix.S(0.3f);
             spiderModels.Add(spiderModel);
 
             // TODO fix models
@@ -82,17 +82,17 @@ namespace StereoKitApp
             //spiderModels.Add(spiderModel);
 
             // initialize level 7
-            spiderModel = Asset.Instance.SpiderModelE;
-            spiderModel.RootNode.ModelTransform *= Matrix.S(0.4f);
+            spiderModel = Asset.Instance.SpiderModelE.Copy();
+            spiderModel.RootNode.ModelTransform *= Matrix.S(0.3f);
             spiderModels.Add(spiderModel);
 
             // initialize level 8
-            spiderModel = Asset.Instance.SpiderModelF;
-            spiderModel.RootNode.ModelTransform *= Matrix.S(0.4f);
+            spiderModel = Asset.Instance.SpiderModelF.Copy();
+            spiderModel.RootNode.ModelTransform *= Matrix.S(0.3f);
             spiderModels.Add(spiderModel);
 
             // initialize level 9
-            spiderModel = Asset.Instance.SpiderModelG.Copy(); // call Copy() so we can play different animations for each spider instance
+            spiderModel = Asset.Instance.SpiderModelG.Copy();
             spiderModel.RootNode.ModelTransform *= Matrix.S(0.003f);
             spiderModel.PlayAnim("walk_ani_vor", AnimMode.Loop);
             spiderModels.Add(spiderModel);

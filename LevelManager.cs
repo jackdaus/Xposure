@@ -7,71 +7,77 @@ namespace StereoKitApp
 {
     internal class LevelManager
     {
-        private bool[] selectedScene = {false};
-        private bool sceneStarted = false;
+        private PhobiaType? selectedPhobiaType;
+
         private SpidersScene spidersScene = new SpidersScene();
-        private Pose pose { get; set; }
         private int currentLevel = 0;
         private const int SPIDERS_MAX_LEVEL = Spider.MAX_LEVEL;
 
-        public LevelManager(Pose pose, Vec2 dimensions)
-        {
-            this.pose = pose;
+        Pose windowPose = new Pose(-0.4f, 0, -0.4f, Quat.LookDir(1, 0, 1));
+
+        public LevelManager()
+        { 
         }
+
         public void Step()
         {
-            Pose pose = this.pose;
+            UI.WindowBegin("Level Manager", ref windowPose, new Vec2(20, 10) * U.cm, UIWin.Normal, UIMove.Exact);
 
-            UI.WindowBegin("Level manager", ref pose, new Vec2(20, 10) * U.cm, UIWin.Normal, UIMove.Exact);
-            if (!sceneStarted)
+            UI.Label("Start a scenario");
+            if (UI.Button("Spider"))    initScene(PhobiaType.Spider);
+            UI.SameLine();
+            if (UI.Button("Bee"))       initScene(PhobiaType.Bee);
+            UI.SameLine();
+            if (UI.Button("Bird"))      initScene(PhobiaType.Bird);
+
+            if (selectedPhobiaType.HasValue)
             {
-                UI.Label("Scenario");
-                UI.Toggle("Spiders", ref selectedScene[0]);
-                if (selectedScene[0])
+                UI.HSeparator();
+                UI.Label($"Selected: {selectedPhobiaType}");
+
+                UI.Label($"Level {currentLevel} out of {SPIDERS_MAX_LEVEL}");
+                if (UI.Button("Down") && currentLevel > 0)
                 {
-                    UI.Label($"Starting level: {currentLevel} out of {SPIDERS_MAX_LEVEL}");
-                    if (UI.Button("Down") && currentLevel > 0)
-                    {
-                        currentLevel--;
-                    }
-                    UI.SameLine();
-                    if (UI.Button("Up") && currentLevel < SPIDERS_MAX_LEVEL)
-                    {
-                        currentLevel++;
-                    }
-                    UI.SameLine();
-                    if (UI.Button("Start"))
-                    {
-                        spidersScene.init(currentLevel);
-                        sceneStarted = true;
-                    }
+                    currentLevel--;
+                    spidersScene.SetCurrentLevel(currentLevel);
                 }
-            } else
-            {
-                UI.Toggle("Stop", ref sceneStarted);
-            }
+                UI.SameLine();
+                if (UI.Button("Up") && currentLevel < SPIDERS_MAX_LEVEL)
+                {
+                    currentLevel++;
+                    spidersScene.SetCurrentLevel(currentLevel);
+                }
+                UI.SameLine();
 
+                if (UI.Button("Stop")) stopScene();
+            }
             UI.WindowEnd();
-            if (sceneStarted)
-            {
-                stepScene();
-            }
 
-            if (!pose.position.Equals(this.pose.position) || !pose.orientation.Equals(this.pose.orientation))
-                this.pose = pose;
+            if (selectedPhobiaType.HasValue) spidersScene.Step();
         }
 
-        private void stepScene()
+        private void initScene(PhobiaType type)
         {
-            switch (Array.IndexOf(selectedScene, true))
-            {
-                case 0:
-                    spidersScene.Step();
-                    break;
-                default:
-                    Log.Info("No scene selected!");
-                    break;
-            }
+            selectedPhobiaType = type;
+            spidersScene.Init(currentLevel);
+        }
+
+        private void stopScene()
+        {
+            currentLevel = 0;
+            selectedPhobiaType = null;
+            spidersScene.SetCurrentLevel(currentLevel);
+        }
+
+        private enum PhobiaType
+        {
+            Spider,
+            Bee,
+            Bird,
+            Snake,
+            Dogs,
+            Insect,
+            Reptile,
         }
     }
 }

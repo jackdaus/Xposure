@@ -13,29 +13,17 @@ namespace StereoKitApp
 
 		Matrix floorTransform;
 		Material floorMaterial;
-		LevelManager lvlManager = new LevelManager(new Pose(0, 0, 0, Quat.LookDir(0, 0, 0)), new Vec2(10, 0) * U.cm);
-		Spider mySpider;
-        Spider mySpider2;
-
-		Pose menuPose = new Pose(0.4f, 0, -0.4f, Quat.LookDir(-1, 0, 1));
-		int currentLevel = 0;
-		const int MAX_LEVEL = Spider.MAX_LEVEL;
+		LevelManager lvlManager;
 
 		public void Init()
 		{
-			float floorHeight = World.HasBounds ? World.BoundsPose.position.y : -1.5f;
-
 			// Create assets used by the app
-			floorTransform = Matrix.TS(new Vec3(0, floorHeight, 0), new Vec3(30, 0.1f, 30));
+			floorTransform = Matrix.TS(new Vec3(0, Util.FloorHeight, 0), new Vec3(30, 0.1f, 30));
 			floorMaterial = new Material(Shader.FromFile("floor.hlsl"));
 			floorMaterial.Transparency = Transparency.Blend;
 
-			if (World.HasBounds)
-            {
-                Log.Info("Has bounds!");
-                Log.Info($"World pose: ({World.BoundsPose.position.x}, {World.BoundsPose.position.y}, {World.BoundsPose.position.z})");
-			}
-        }
+			lvlManager = new LevelManager();
+		}
 
 		public void Step()
 		{
