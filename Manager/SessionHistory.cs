@@ -45,8 +45,7 @@ namespace StereoKitApp
             TimeSpan totalTime = new TimeSpan();
             _sessions.ForEach(session =>
             {
-                var span = (session.End ?? DateTime.Now) - session.Begin;
-                totalTime = totalTime.Add(span);
+                totalTime = totalTime.Add(session.GetTimeSpan());
             });
 
             return totalTime;
@@ -63,6 +62,11 @@ namespace StereoKitApp
         public bool HasActiveSession()
         {
             return _inProgress;
+        }
+
+        public bool Any()
+        {
+            return _sessions.Count() > 0;
         }
     }
 }

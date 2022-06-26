@@ -4,7 +4,7 @@ namespace StereoKitApp
 {
     /// <summary>
     /// A store of all the loaded models to be used by the application. 
-    /// Call Copy() on a model to get a unique copy so that different animations can be played across multiple models!
+    /// Call Copy() on Models to get a unique copy so that different animations can be played across multiple instances!
     /// </summary>
     public sealed class Asset
     {
@@ -20,6 +20,10 @@ namespace StereoKitApp
         public Model SpiderModelF { get; }
         public Model SpiderModelG { get; }
 
+        public Sprite IconClose { get; }
+        public Sprite IconDown { get; }
+        public Sprite IconUp { get; }
+
         Asset()
         {
             SpiderModelA = Model.FromFile("spiderA.glb");
@@ -29,6 +33,10 @@ namespace StereoKitApp
             SpiderModelE = Model.FromFile("spiderE.glb");
             SpiderModelF = Model.FromFile("spiderF.glb");
             SpiderModelG = Model.FromFile("spiderG/scene.gltf");
+
+            IconClose   = Sprite.FromFile("Icons/outline_close_white_24dp.png");
+            IconDown    = Sprite.FromFile("Icons/outline_arrow_downward_white_24dp.png");
+            IconUp      = Sprite.FromFile("Icons/outline_arrow_upward_white_24dp.png");
         }
 
         public static Asset Instance

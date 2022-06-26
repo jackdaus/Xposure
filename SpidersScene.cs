@@ -8,7 +8,6 @@ namespace StereoKitApp
     internal class SpidersScene
     {
         private List<Spider> spiders = new List<Spider>();
-        private int currentLevel = 0;
 
         public SpidersScene()
         {
@@ -18,7 +17,7 @@ namespace StereoKitApp
         {
             spiders.Clear();
             Spider spider = new Spider();
-            spider.SetPosition(0f, Util.FloorHeight, -2);
+            spider.SetPosition(0f, Util.FloorHeight + 0.05f, -2);
             spider.Level = startingLevel;
             spiders.Add(spider);
         }
@@ -30,7 +29,6 @@ namespace StereoKitApp
 
         public void SetCurrentLevel(int level)
         {
-            this.currentLevel = level;
             spiders.ForEach(sp => sp.Level = level);
         }
     }

@@ -9,5 +9,10 @@ namespace StereoKitApp
         public DateTime Begin { get; set; }
         public DateTime? End { get; set; }
         public int Level { get; set; }
+
+        public TimeSpan GetTimeSpan()
+        {
+            return (End ?? DateTime.Now) - Begin;
+        }
     }
 }

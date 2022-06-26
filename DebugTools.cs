@@ -7,7 +7,7 @@ namespace StereoKitApp
 		/// <summary>
 		/// Conveiently toggle the debug tools on/off here!
 		/// </summary>
-		public static bool DEBUG_TOOLS_ON = false;
+		public static bool DEBUG_TOOLS_ON = true;
 
 		/// <summary>
 		/// Draw the unit coordinates at the origin. Useful for understanding your current orientation while debugging.
