@@ -5,7 +5,7 @@ using StereoKit;
 
 namespace StereoKitApp
 {
-    internal class LevelManager
+    public class LevelManager
     {
         private PhobiaType? selectedPhobiaType;
 

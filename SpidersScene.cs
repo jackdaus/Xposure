@@ -5,7 +5,7 @@ using System.Text;
 
 namespace StereoKitApp
 {
-    internal class SpidersScene
+    public class SpidersScene : Scene
     {
         private List<Spider> spiders = new List<Spider>();
         private int currentLevel = 0;
