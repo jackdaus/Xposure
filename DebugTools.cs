@@ -1,4 +1,5 @@
 ﻿using StereoKit;
+using System.Collections.Generic;
 
 namespace StereoKitApp
 {
@@ -38,5 +39,28 @@ namespace StereoKitApp
 					1 * U.cm);
 			}
         }
+
+		static Pose logPose = new Pose(0, -0.1f, 0.5f, Quat.LookDir(Vec3.Forward));
+		static List<string> logList = new List<string>();
+		static string logText = "";
+		public static void OnLog(LogLevel level, string text)
+		{
+			if (logList.Count > 15)
+				logList.RemoveAt(logList.Count - 1);
+			logList.Insert(0, text.Length < 100 ? text : text.Substring(0, 100) + "...\n");
+
+			logText = "";
+			for (int i = 0; i < logList.Count; i++)
+				logText += logList[i];
+		}
+		public static void LogWindow()
+		{
+			UI.WindowBegin("Log", ref logPose, new Vec2(40, 0) * U.cm);
+			UI.Text(logText);
+			UI.HSeparator();
+			float fps = 1 / Time.Elapsedf;
+			UI.Text(fps.ToString());
+			UI.WindowEnd();
+		}
 	}
 }

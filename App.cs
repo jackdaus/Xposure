@@ -28,6 +28,7 @@ namespace StereoKitApp
 			floorMaterial.Transparency = Transparency.Blend;
 
 			lvlManager = new LevelManager();
+			Log.Subscribe(DebugTools.OnLog);
 
 			if (DebugTools.DEBUG_TOOLS_ON)
             {
@@ -50,6 +51,7 @@ namespace StereoKitApp
 				Default.MeshCube.Draw(floorMaterial, floorTransform);
 
 			lvlManager.Step();
+			DebugTools.LogWindow();
 
 			//DebugTools.DrawGlobalCoordinates();
 
