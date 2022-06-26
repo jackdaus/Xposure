@@ -17,7 +17,7 @@ namespace StereoKitApp
         {
             spiders.Clear();
             Spider spider = new Spider();
-            spider.SetPosition(0f, Util.FloorHeight + 0.05f, -2);
+            spider.SetPosition(0f, Util.FloorHeight + 0.05f, 0);
             spider.Level = startingLevel;
             spiders.Add(spider);
         }

@@ -7,15 +7,15 @@ namespace StereoKitApp
 {
     internal class LevelManager
     {
-        private PhobiaType? selectedPhobiaType;
+        private PhobiaType? _selectedPhobiaType;
 
-        private SpidersScene spidersScene = new SpidersScene();
-        private int currentLevel = 0;
+        private SpidersScene _spidersScene = new SpidersScene();
+        private int _currentLevel = 0;
         private const int SPIDERS_MAX_LEVEL = Spider.MAX_LEVEL;
 
-        Pose windowPose = new Pose(-0.4f, 0, -0.4f, Quat.LookDir(1, 0, 1));
+        Pose _windowPose = new Pose(-0.4f, 0, -0.4f, Quat.LookDir(1, 0, 1));
 
-        SessionHistory history = new SessionHistory();
+        SessionHistory _history = new SessionHistory();
         Report _report = new Report();
 
         public LevelManager()
@@ -24,14 +24,14 @@ namespace StereoKitApp
 
         public void Step()
         {
-            if (selectedPhobiaType.HasValue) 
-                spidersScene.Step();
+            if (_selectedPhobiaType.HasValue) 
+                _spidersScene.Step();
 
-            _report.Step(history);
+            _report.Step(_history);
             
-            UI.WindowBegin("XposuRe", ref windowPose);
+            UI.WindowBegin("XposuRe", ref _windowPose);
 
-                if (!selectedPhobiaType.HasValue)
+                if (!_selectedPhobiaType.HasValue)
                 {
                     UI.Label("Start a scenario");
                     if (UI.Button("Spider"))    
@@ -44,30 +44,30 @@ namespace StereoKitApp
                         initScene(PhobiaType.Bird);
                 }
 
-                if (selectedPhobiaType.HasValue)
+                if (_selectedPhobiaType.HasValue)
                 {
-                    UI.Label($"Level {currentLevel} out of {SPIDERS_MAX_LEVEL}");
+                    UI.Label($"Level {_currentLevel} out of {SPIDERS_MAX_LEVEL}");
                     UI.SameLine();
-                    if (UI.ButtonRound("Down", Asset.Instance.IconDown) && currentLevel > 0) 
-                        changeLevel(currentLevel - 1);
+                    if (UI.ButtonRound("Down", Asset.Instance.IconDown) && _currentLevel > 0) 
+                        changeLevel(_currentLevel - 1);
                     UI.SameLine();
-                    if (UI.ButtonRound("Up", Asset.Instance.IconUp) && currentLevel < SPIDERS_MAX_LEVEL) 
-                        changeLevel(currentLevel + 1);
+                    if (UI.ButtonRound("Up", Asset.Instance.IconUp) && _currentLevel < SPIDERS_MAX_LEVEL) 
+                        changeLevel(_currentLevel + 1);
 
                     if (UI.Button("Done")) 
                         stopScene();
 
-                    TimeSpan currentLevelTime = history.GetCurrentLevelTime();
+                    TimeSpan currentLevelTime = _history.GetCurrentLevelTime();
                     UI.SameLine();
                     UI.Label($"{currentLevelTime.Minutes}m {currentLevelTime.Seconds}s");
                 }
 
 
-                if (history.Any() && !selectedPhobiaType.HasValue && !_report.IsVisible())
+                if (_history.Any() && !_selectedPhobiaType.HasValue && !_report.IsVisible())
                 {
                     UI.HSeparator();
                     if (UI.Button("View Report"))
-                        _report.MakeVisible(windowPose);
+                        _report.MakeVisible(_windowPose);
                 }
 
             UI.WindowEnd();
@@ -75,31 +75,31 @@ namespace StereoKitApp
 
         private void initScene(PhobiaType type)
         {
-            if (selectedPhobiaType != null)
+            if (_selectedPhobiaType != null)
                 throw new InvalidOperationException("Scene already in progress! Cannot begin a new scene.");
             
-            history.BeginSession(currentLevel);
+            _history.BeginSession(_currentLevel);
 
-            selectedPhobiaType = type;
-            spidersScene.Init(currentLevel);
+            _selectedPhobiaType = type;
+            _spidersScene.Init(_currentLevel);
         }
 
         private void stopScene()
         {
-            history.EndSession();
+            _history.EndSession();
 
-            currentLevel = 0;
-            spidersScene.SetCurrentLevel(0);
-            selectedPhobiaType = null;
+            _currentLevel = 0;
+            _spidersScene.SetCurrentLevel(0);
+            _selectedPhobiaType = null;
         }
 
         private void changeLevel(int level)
         {
-            currentLevel = level;
-            spidersScene.SetCurrentLevel(currentLevel);
+            _currentLevel = level;
+            _spidersScene.SetCurrentLevel(_currentLevel);
 
-            history.EndSession();
-            history.BeginSession(currentLevel);
+            _history.EndSession();
+            _history.BeginSession(_currentLevel);
         }
 
         private enum PhobiaType
