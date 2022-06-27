@@ -4,12 +4,14 @@ using System.Text;
 
 namespace StereoKitApp
 {
-    internal interface Scene
+    internal interface IScene
     {
         void Init(int startingLevel);
 
         void Step();
 
         void SetCurrentLevel(int level);
+
+        int GetMaxLevel();
     }
 }

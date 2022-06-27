@@ -15,9 +15,8 @@ namespace StereoKitApp
 		Material floorMaterial;
 		LevelManager lvlManager;
 
-
 		// for debug
-        Spider debugSpider1;
+		Spider debugSpider1;
         Spider debugSpider2;
 
         public void Init()
@@ -30,13 +29,16 @@ namespace StereoKitApp
 			lvlManager = new LevelManager();
 			Log.Subscribe(DebugTools.OnLog);
 
-			if (DebugTools.DEBUG_TOOLS_ON)
+			// TODO move to debug class to clean up this file
+			if (DebugTools.DEBUG_SPIDERS_ON)
             {
 				debugSpider1 = new Spider();
+				debugSpider1.Init();
 				debugSpider1.SetPosition(0.1f, -0.1f, -0.3f);
 				debugSpider1.Level = 9;
 
 				debugSpider2 = new Spider();
+				debugSpider2.Init();
 				debugSpider2.SetPosition(-0.1f, -0.1f, -0.3f);
 				debugSpider2.Level = 5;
             }
@@ -55,7 +57,7 @@ namespace StereoKitApp
 
 			//DebugTools.DrawGlobalCoordinates();
 
-			if (DebugTools.DEBUG_TOOLS_ON)
+			if (DebugTools.DEBUG_SPIDERS_ON)
             {
 				debugSpider1.Step();
 				debugSpider2.Step();

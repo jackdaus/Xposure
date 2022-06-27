@@ -5,7 +5,7 @@ using System.Text;
 
 namespace StereoKitApp
 {
-    public class SpidersScene : Scene
+    public class SpidersScene : IScene
     {
         private List<Spider> spiders = new List<Spider>();
 
@@ -17,7 +17,14 @@ namespace StereoKitApp
         {
             spiders.Clear();
             Spider spider = new Spider();
-            spider.SetPosition(0f, Util.FloorHeight + 0.05f, 0);
+            spider.Init();
+
+            // Put spider "in front" if debugging for easier viewing
+            var position = DebugTools.DEBUG_TOOLS_ON
+                ? new Vec3(0, 0, -0.6f)
+                : new Vec3(0, Util.FloorHeight + 0.05f, 0);
+
+            spider.SetPosition(position);
             spider.Level = startingLevel;
             spiders.Add(spider);
         }
@@ -30,6 +37,12 @@ namespace StereoKitApp
         public void SetCurrentLevel(int level)
         {
             spiders.ForEach(sp => sp.Level = level);
+        }
+
+        public int GetMaxLevel()
+        {
+            // TODO design actual levels
+            return 9; 
         }
     }
 }

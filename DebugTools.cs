@@ -8,7 +8,8 @@ namespace StereoKitApp
 		/// <summary>
 		/// Conveiently toggle the debug tools on/off here!
 		/// </summary>
-		public static bool DEBUG_TOOLS_ON = false;
+		public static bool DEBUG_TOOLS_ON = true;
+		public static bool DEBUG_SPIDERS_ON = false;
 
 		/// <summary>
 		/// Draw the unit coordinates at the origin. Useful for understanding your current orientation while debugging.
@@ -40,7 +41,7 @@ namespace StereoKitApp
 			}
         }
 
-		static Pose logPose = new Pose(0, -0.1f, 0.5f, Quat.LookDir(Vec3.Forward));
+		static Pose logPose = new Pose(1, 0, -0.5f, Quat.LookDir(-1, 0, 1));
 		static List<string> logList = new List<string>();
 		static string logText = "";
 		public static void OnLog(LogLevel level, string text)

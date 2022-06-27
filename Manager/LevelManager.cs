@@ -8,15 +8,11 @@ namespace StereoKitApp
     internal class LevelManager
     {
         private PhobiaType? _selectedPhobiaType;
-
-        private SpidersScene _spidersScene = new SpidersScene();
-        private int _currentLevel = 0;
-        private const int SPIDERS_MAX_LEVEL = Spider.MAX_LEVEL;
-
-        Pose _windowPose = new Pose(-0.4f, 0, -0.4f, Quat.LookDir(1, 0, 1));
-
-        SessionHistory _history = new SessionHistory();
-        Report _report = new Report();
+        private IScene _scene;
+        private int _currentSceneLevel = 0;
+        private Pose _windowPose = new Pose(-0.4f, 0, -0.4f, Quat.LookDir(1, 0, 1));
+        private SessionHistory _history = new SessionHistory();
+        private Report _report = new Report();
 
         public LevelManager()
         { 
@@ -25,7 +21,7 @@ namespace StereoKitApp
         public void Step()
         {
             if (_selectedPhobiaType.HasValue) 
-                _spidersScene.Step();
+                _scene.Step();
 
             _report.Step(_history);
             
@@ -46,13 +42,13 @@ namespace StereoKitApp
 
                 if (_selectedPhobiaType.HasValue)
                 {
-                    UI.Label($"Level {_currentLevel} out of {SPIDERS_MAX_LEVEL}");
+                    UI.Label($"Level {_currentSceneLevel} out of {_scene.GetMaxLevel()}");
                     UI.SameLine();
-                    if (UI.ButtonRound("Down", Asset.Instance.IconDown) && _currentLevel > 0) 
-                        changeLevel(_currentLevel - 1);
+                    if (UI.ButtonRound("Down", Asset.Instance.IconDown) && _currentSceneLevel > 0) 
+                        changeLevel(_currentSceneLevel - 1);
                     UI.SameLine();
-                    if (UI.ButtonRound("Up", Asset.Instance.IconUp) && _currentLevel < SPIDERS_MAX_LEVEL) 
-                        changeLevel(_currentLevel + 1);
+                    if (UI.ButtonRound("Up", Asset.Instance.IconUp) && _currentSceneLevel < _scene.GetMaxLevel()) 
+                        changeLevel(_currentSceneLevel + 1);
 
                     if (UI.Button("Done")) 
                         stopScene();
@@ -77,29 +73,47 @@ namespace StereoKitApp
         {
             if (_selectedPhobiaType != null)
                 throw new InvalidOperationException("Scene already in progress! Cannot begin a new scene.");
-            
-            _history.BeginSession(_currentLevel);
 
             _selectedPhobiaType = type;
-            _spidersScene.Init(_currentLevel);
+
+            switch (type)
+            {
+                case PhobiaType.Spider:
+                    _scene = new SpidersScene();
+                    break;
+                case PhobiaType.Bee:
+                    // TODO
+                    _scene = new SpidersScene();
+                    break;
+                case PhobiaType.Dog:
+                    // TODO
+                    _scene = new SpidersScene();
+                    break;
+                defaut:
+                    throw new NotImplementedException();
+                    break;
+            }
+
+            _scene.Init(_currentSceneLevel);
+            _history.BeginSession(_currentSceneLevel);
         }
 
         private void stopScene()
         {
             _history.EndSession();
 
-            _currentLevel = 0;
-            _spidersScene.SetCurrentLevel(0);
+            _currentSceneLevel = 0;
+            _scene.SetCurrentLevel(0);
             _selectedPhobiaType = null;
         }
 
         private void changeLevel(int level)
         {
-            _currentLevel = level;
-            _spidersScene.SetCurrentLevel(_currentLevel);
+            _currentSceneLevel = level;
+            _scene.SetCurrentLevel(_currentSceneLevel);
 
             _history.EndSession();
-            _history.BeginSession(_currentLevel);
+            _history.BeginSession(_currentSceneLevel);
         }
 
         private enum PhobiaType
@@ -108,7 +122,7 @@ namespace StereoKitApp
             Bee,
             Bird,
             Snake,
-            Dogs,
+            Dog,
             Insect,
             Reptile,
         }
