@@ -6,13 +6,14 @@ namespace StereoKitApp
 	public class App
 	{
 		public SKSettings Settings => new SKSettings { 
-			appName           = "StereoKit Template",
+			appName           = "XposuRe",
 			assetsFolder      = "Assets",
 			displayPreference = DisplayMode.MixedReality
 		};
 
 		Matrix floorTransform;
 		Material floorMaterial;
+		Solid floorSolid;
 		LevelManager lvlManager;
 
         public void Init()
@@ -20,14 +21,19 @@ namespace StereoKitApp
 			DebugTools.Init();
 
 			// Create assets used by the app
-			floorTransform = Matrix.TS(new Vec3(0, Util.FloorHeight, 0), new Vec3(30, 0.1f, 30));
+			Vec3 floorPosition = new Vec3(0, Util.FloorHeight, 0);
+			floorTransform = Matrix.TS(floorPosition, new Vec3(30, 0.1f, 30));
 			floorMaterial = new Material(Shader.FromFile("floor.hlsl"));
 			floorMaterial.Transparency = Transparency.Blend;
 
-			lvlManager = new LevelManager();
+			floorSolid = new Solid(floorPosition, Quat.Identity, SolidType.Immovable);
+			floorSolid.AddBox(new Vec3(20, 1000, 20), offset: new Vec3(0, -500, 0));
 
-			// Change up the color for fun
-			UI.ColorScheme = new Color(0.5f, 0.3f, 0.7f);
+			// Prevent hands from interacting with the physics system.
+			// The hands don't play very nicely with the other solids
+			Input.HandSolid(Handed.Max, false);
+
+			lvlManager = new LevelManager();
 		}
 
 		public void Step()

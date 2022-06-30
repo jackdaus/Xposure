@@ -22,7 +22,7 @@ namespace StereoKitApp
             // Put spider "in front" if debugging for easier viewing
             var position = DebugTools.DEBUG_TOOLS_ON
                 ? new Vec3(0, 0, -0.6f)
-                : new Vec3(0, Util.FloorHeight + 0.05f, -1);
+                : new Vec3(0.25f, Util.FloorHeight + 0.05f, 0);
 
             spider.SetPosition(position);
             spider.Level = startingLevel;

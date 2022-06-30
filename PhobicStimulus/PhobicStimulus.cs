@@ -1,6 +1,7 @@
 ﻿using StereoKit;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace StereoKitApp
@@ -8,7 +9,7 @@ namespace StereoKitApp
     internal abstract class PhobicStimulus
     {
         protected List<Model> models = new List<Model>();
-        private Pose _pose = new Pose(0, 0, 0, Quat.Identity);
+        private Solid _solid;
         private readonly Random _random = new Random();
         private int _level = 0;
         private Model _activeModel;
@@ -21,7 +22,7 @@ namespace StereoKitApp
 
         // debug
         private Pose _debugWindowPose = new Pose(0.4f, 0, -0.4f, Quat.LookDir(0, 0, 1));
-        private float _debugScale = 1;
+        private float _debugScale = 5;
         private Guid _id = Guid.NewGuid();
 
         /// <summary>
@@ -46,8 +47,13 @@ namespace StereoKitApp
                 _level = value;
                 _activeModel = models[_level];
 
-                // toggle animation to sync model to the current animation state
-                toggleAnimation();
+                // sync model animation to the current animation state
+                syncAnimation();
+
+                // TODO when the model changes, also change the solid's physical shape
+                // Maybe this would be best accomplished by encapsulating each model in another object
+                // that has a corresponding Solid. In that case, we can init each solid
+                // during the InitModels call.
             }
         }
 
@@ -56,44 +62,88 @@ namespace StereoKitApp
         }
 
         /// <summary>
-        /// Call after creating the stimulus to initialize all the models! Only call DURING/AFTER the StereoKit app initialization.
+        /// Load all the models for the stimulus
         /// </summary>
-        public abstract void Init();
+        protected abstract void InitModels();
+
+        /// <summary>
+        /// Call after creating the stimulus to initialize! Only call DURING/AFTER the StereoKit app initialization.
+        /// </summary>
+        public void Init()
+        {
+            InitModels();
+            Level = 1;
+
+            // The initial position of the object
+            _solid = new Solid(V.XYZ(0, 0, -1), Quat.Identity);
+
+            // Use the last model's bounds since it looks the best
+            _solid.AddBox(models.Last().Bounds.dimensions * _debugScale, 1);
+        }
 
         /// <summary>
         /// Step the phobic stimulus.
         /// </summary>
         public void Step()
         {
-            var right = _pose.Right;
-            var forwardPose = _pose.Forward;
-
+            // Roaming movement
             if (RoamingOn && _isWalking)
             {
-                var speed = 0.00045f;
-                _pose.position.z += forwardPose.z * speed;
-                _pose.position.x += forwardPose.x * speed;
-                
-                // Rotate 
-                _pose = (Matrix.R(0, 0.1f, 0) * _pose.ToMatrix()).Pose;
+                Pose solidPose = _solid.GetPose();
+                Vec3 forwardPose = solidPose.Forward;
+
+                float speed = 0.0015f * _debugScale;
+                Vec3 newPosition = new Vec3();
+                newPosition.x = solidPose.position.x + (forwardPose.x * speed);
+                newPosition.y = solidPose.position.y;
+                newPosition.z = solidPose.position.z + (forwardPose.z * speed);
+
+                // Rotate to walk in a circle
+                Quat rotateAroundY = (Matrix.R(0, 0.5f, 0) * solidPose.ToMatrix()).Rotation;
+
+                // Remove wobble
+                rotateAroundY.z = 0;
+                rotateAroundY.x = 0;
+
+                _solid.Teleport(newPosition, rotateAroundY);
             }
 
-            UI.Handle($"Spider_{_id}", ref _pose, _activeModel.Bounds * _debugScale);
-            _activeModel.Draw(Matrix.S(_debugScale) * _pose.ToMatrix());
+            // Allow user to pick up / move the solid
+            Pose sPose = _solid.GetPose();
+            if (UI.Handle($"PSTIM_{_id}", ref sPose, _activeModel.Bounds * _debugScale))
+            {
+                // We must disable physics when UI handle is in use
+                _solid.Enabled = false;
+            }
+            else
+            {
+                _solid.Enabled = true;
+            }
+
+            // We need the teleport here... not sure why... but it makes it work!
+            _solid.Teleport(sPose.position, sPose.orientation);
+            _activeModel.Draw(sPose.ToMatrix(_debugScale));
+
+            if (DebugTools.DEBUG_TOOLS_ON)
+            {
+                // Draw a UI box to visualize the solid
+                Mesh box = Mesh.GenerateCube(_activeModel.Bounds.dimensions);
+                box.Draw(Material.UIBox, sPose.ToMatrix(_debugScale));
+            }
 
             // randomly change walking status about every 1/300 steps, with a throttle of 3 seconds
             var timeSinceLastChange = DateTime.Now - _lastWalkingChange;
             if (_random.Next(300) == 1 && timeSinceLastChange.TotalSeconds > 3)
             {
                 _isWalking = !_isWalking;
-                toggleAnimation();
+                syncAnimation();
                 _lastWalkingChange = DateTime.Now;
             }
 
             if (DebugTools.DEBUG_TOOLS_ON)
             {
                 // Window for debug controls
-                UI.WindowBegin($"SPIDER_DEBUG_{_id}", ref _debugWindowPose);
+                UI.WindowBegin($"PSTIM_DEBUG_{_id}", ref _debugWindowPose);
                 UI.Label($"Level: {Level}");
                 UI.SameLine();
                 if (UI.ButtonRound($"Down_{_id}", Asset.Instance.IconDown) && _level > 0)
@@ -106,9 +156,10 @@ namespace StereoKitApp
 
                 UI.Label($"Scale: {_debugScale}");
                 UI.HSlider($"Scale_{_id}", ref _debugScale, 0, 10, 0.01f);
-                UI.Label($"x: {_pose.position.x}");
-                UI.Label($"y: {_pose.position.y}");
-                UI.Label($"z: {_pose.position.z}");
+
+                UI.Label($"x: {_solid.GetPose().position.x}");
+                UI.Label($"y: {_solid.GetPose().position.y}");
+                UI.Label($"z: {_solid.GetPose().position.z}");
                 UI.WindowEnd();
             }
         }
@@ -121,9 +172,8 @@ namespace StereoKitApp
         /// <param name="z"></param>
         public void SetPosition(float x, float y, float z)
         {
-            _pose.position.x = x;
-            _pose.position.y = y;
-            _pose.position.z = z;
+            var currentRotation = _solid.GetPose().orientation;
+            _solid.Teleport(V.XYZ(x, y, z), currentRotation);
 
             _debugWindowPose.position.x = x;
             _debugWindowPose.position.y = y;
@@ -141,7 +191,7 @@ namespace StereoKitApp
 
 
         // TODO make this compatible with other PhobicStimulus sub-classes
-        private void toggleAnimation()
+        private void syncAnimation()
         {
             // last level has animations
             if (_level == _maxModelLevel)

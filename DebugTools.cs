@@ -8,8 +8,8 @@ namespace StereoKitApp
 		/// <summary>
 		/// Conveiently toggle the debug tools on/off here!
 		/// </summary>
-		public static bool DEBUG_TOOLS_ON	= false;
-		public static bool DEBUG_SPIDERS_ON = false;
+		public static bool DEBUG_TOOLS_ON = false;
+		public readonly static bool DEBUG_SPIDERS_ON = false;
 
 		private static Pose logPose = new Pose(1, 0, -0.5f, Quat.LookDir(-1, 0, 1));
 		private static List<string> logList = new List<string>();
@@ -25,12 +25,15 @@ namespace StereoKitApp
 			if (DEBUG_SPIDERS_ON)
             {
 				debugSpider1.Init();
-				debugSpider1.SetPosition(0f, -0.1f, -0.5f);
+				debugSpider1.SetPosition(0f, 0, -0.5f);
 				debugSpider1.Level = 9;
 				debugSpider1.RoamingOn = true;
 
 				debugSpider2.Init();
-            }
+				debugSpider1.SetPosition(0f, 0, -1f);
+				debugSpider1.Level = 9;
+				debugSpider1.RoamingOn = true;
+			}
 		}
 
 		public static void Step()
@@ -40,8 +43,8 @@ namespace StereoKitApp
 			if (DEBUG_SPIDERS_ON)
             {
 				debugSpider1.Step();
-				debugSpider2.Step();
-			}
+                debugSpider2.Step();
+            }
 		}
 
 		/// <summary>

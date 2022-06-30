@@ -8,7 +8,7 @@ namespace StereoKitApp
         {
         }
 
-        public override void Init()
+        protected override void InitModels()
         {
             // initialize level 0 (empty model)
             Model spiderModel = new Model();
@@ -66,8 +66,6 @@ namespace StereoKitApp
             spiderModel.RootNode.ModelTransform *= Matrix.R(0, 180, 0);
             spiderModel.PlayAnim("walk_ani_vor", AnimMode.Loop);
             models.Add(spiderModel);
-
-            Level = 0;
         }
     }
 }
