@@ -15,8 +15,9 @@ namespace StereoKitApp
 		Material floorMaterial;
 		Solid floorSolid;
 		LevelManager lvlManager;
+		public static PassthroughFBExt passthrough;
 
-        public void Init()
+		public void Init()
 		{
 			DebugTools.Init();
 
@@ -36,14 +37,29 @@ namespace StereoKitApp
 			lvlManager = new LevelManager();
 		}
 
+
+		// temp
+		Pose windowPose = new Pose(0.5f, 0, -0.5f, Quat.LookDir(-1, 0, 1));
+
 		public void Step()
 		{
 			DebugTools.Step();
 
-			if (SK.System.displayType == Display.Opaque)
-				Default.MeshCube.Draw(floorMaterial, floorTransform);
-			
-			lvlManager.Step();
-		}
+			// Only draw floor when using VR headset with no AR passthrough
+            if (SK.System.displayType == Display.Opaque && !App.passthrough.EnabledPassthrough)
+                Default.MeshCube.Draw(floorMaterial, floorTransform);
+
+            lvlManager.Step();
+
+            // passthrough
+            UI.WindowBegin("Passthrough Settings", ref windowPose);
+            bool toggle = App.passthrough.EnabledPassthrough;
+            UI.Label(App.passthrough.Available
+                ? "Passthrough EXT available!"
+                : "No passthrough EXT available :(");
+            if (UI.Toggle("Passthrough", ref toggle))
+                App.passthrough.EnabledPassthrough = toggle;
+            UI.WindowEnd();
+        }
 	}
 }

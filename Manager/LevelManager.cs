@@ -10,7 +10,7 @@ namespace StereoKitApp
         private PhobiaType? _selectedPhobiaType;
         private IScene _scene;
         private int _currentSceneLevel = 1;
-        private Pose _windowPose = new Pose(-0.4f, 0, -0.4f, Quat.LookDir(1, 0, 1));
+        private Pose _windowPose = new Pose(-0.3f, 0, -0.3f, Quat.LookDir(1, 0, 1));
         private SessionHistory _history = new SessionHistory();
         private Report _report = new Report();
         private bool _wasJustTouching = false;
@@ -43,8 +43,7 @@ namespace StereoKitApp
                     if (UI.Button("Claustrophobia"))
                         initScene(PhobiaType.Claustrophobia);
                 }
-
-                if (_selectedPhobiaType.HasValue)
+                else
                 {
                     UI.Label($"Level {_currentSceneLevel} out of {_scene.GetMaxLevel()}");
                     UI.SameLine();

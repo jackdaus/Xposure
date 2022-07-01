@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using StereoKit;
 using StereoKitApp;
 
@@ -19,6 +19,9 @@ class SKLoader
 			: (App)Activator.CreateInstance(appType);
 		if (app == null)
 			throw new Exception("StereoKit loader couldn't construct an instance of the App!");
+
+		// Create passthrough stepper here. MUST be done before call to SK.Initialize
+		App.passthrough = SK.AddStepper(new PassthroughFBExt());
 
 		// Initialize StereoKit, and the app
 		if (!SK.Initialize(app.Settings))
