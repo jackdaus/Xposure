@@ -9,10 +9,11 @@ namespace StereoKitApp
     {
         private PhobiaType? _selectedPhobiaType;
         private IScene _scene;
-        private int _currentSceneLevel = 0;
+        private int _currentSceneLevel = 1;
         private Pose _windowPose = new Pose(-0.4f, 0, -0.4f, Quat.LookDir(1, 0, 1));
         private SessionHistory _history = new SessionHistory();
         private Report _report = new Report();
+        private bool _wasJustTouching = false;
 
         public LevelManager()
         { 
@@ -20,8 +21,11 @@ namespace StereoKitApp
 
         public void Step()
         {
-            if (_selectedPhobiaType.HasValue) 
+            if (_selectedPhobiaType.HasValue)
+            {
                 _scene.Step();
+                recordTouches();
+            }
 
             _report.Step(_history);
             
@@ -36,8 +40,8 @@ namespace StereoKitApp
                     if (UI.Button("Bee"))       
                         initScene(PhobiaType.Bee);
                     UI.SameLine();
-                    if (UI.Button("Bird"))      
-                        initScene(PhobiaType.Bird);
+                    if (UI.Button("Claustrophobia"))
+                        initScene(PhobiaType.Claustrophobia);
                 }
 
                 if (_selectedPhobiaType.HasValue)
@@ -85,7 +89,7 @@ namespace StereoKitApp
                     // TODO
                     _scene = new SpidersScene();
                     break;
-                case PhobiaType.Dog:
+                case PhobiaType.Claustrophobia:
                     // TODO
                     _scene = new SpidersScene();
                     break;
@@ -102,7 +106,7 @@ namespace StereoKitApp
         {
             _history.EndSession();
 
-            _currentSceneLevel = 0;
+            _currentSceneLevel = 1;
             _scene.SetCurrentLevel(0);
             _selectedPhobiaType = null;
         }
@@ -116,15 +120,35 @@ namespace StereoKitApp
             _history.BeginSession(_currentSceneLevel);
         }
 
+        private void recordTouches()
+        {
+            // TODO add a debounce
+            if (_scene.HandIsTouchingAnyPhobicStimulus())
+            {
+                if (!_wasJustTouching)
+                {
+                    // Just touched!
+                    //Log.Info($"Just Touched! {DateTime.Now.Ticks}");
+                    _history.BeginTouchPeriod();
+
+                    _wasJustTouching = true;
+                }
+            }
+            else if (_wasJustTouching)
+            {
+                // Just untouched!
+                //Log.Info($"Just Untouched! {DateTime.Now.Ticks}");
+                _history.EndTouchPeriod();
+
+                _wasJustTouching = false;
+            }
+        }
+
         private enum PhobiaType
         {
             Spider,
             Bee,
-            Bird,
-            Snake,
-            Dog,
-            Insect,
-            Reptile,
+            Claustrophobia,
         }
     }
 }

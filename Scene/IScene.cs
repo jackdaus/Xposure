@@ -13,5 +13,8 @@ namespace StereoKitApp
         void SetCurrentLevel(int level);
 
         int GetMaxLevel();
+
+        // TODO maybe turn this into a base class and have this method be inheritted? 
+        bool HandIsTouchingAnyPhobicStimulus();
     }
 }

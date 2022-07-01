@@ -1,4 +1,4 @@
-﻿using StereoKit;
+using StereoKit;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -43,6 +43,17 @@ namespace StereoKitApp
         {
             // TODO design actual levels
             return 9; 
+        }
+
+        public bool HandIsTouchingAnyPhobicStimulus()
+        {
+            foreach (var sp in spiders)
+            {
+                if (sp.HandIsTouching())
+                    return true;
+            }
+
+            return false;
         }
     }
 }

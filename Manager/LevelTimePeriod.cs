@@ -4,7 +4,7 @@ using System.Text;
 
 namespace StereoKitApp
 {
-    public struct LevelTimeSpan
+    public struct LevelTimePeriod 
     {
         public DateTime Begin { get; set; }
         public DateTime? End { get; set; }

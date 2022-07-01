@@ -38,7 +38,15 @@ namespace StereoKitApp
 
 		public static void Step()
         {
-			logWindow();
+			if (DEBUG_TOOLS_ON)
+			{
+				logWindow();
+
+				// Add label for finger tip position
+				Hand hand = Input.Hand(Handed.Right);
+				Pose fingerTip = hand[FingerId.Index, JointId.Tip].Pose;
+				Text.Add($"{fingerTip.position}", Matrix.T(V.XYZ(0, 0.1f, 0)) * Matrix.TR(fingerTip.position, Quat.LookDir(0, 0, 1)));
+			}
 
 			if (DEBUG_SPIDERS_ON)
             {
@@ -90,15 +98,12 @@ namespace StereoKitApp
 
 		private static void logWindow()
 		{
-			if (DEBUG_TOOLS_ON)
-            {
-				UI.WindowBegin("Log", ref logPose, new Vec2(40, 0) * U.cm);
-				UI.Text(logText);
-				UI.HSeparator();
-				float fps = 1 / Time.Elapsedf;
-				UI.Text(fps.ToString());
-				UI.WindowEnd();
-            }
+			UI.WindowBegin("Log", ref logPose, new Vec2(40, 0) * U.cm);
+			UI.Text(logText);
+			UI.HSeparator();
+			float fps = 1 / Time.Elapsedf;
+			UI.Text(fps.ToString());
+			UI.WindowEnd();
 		}
 	}
 }

@@ -44,6 +44,17 @@ namespace StereoKitApp
                     TimeSpan ts = s.GetTimeSpan();
                     UI.Label($"Level {s.Level}: {ts.Minutes}m {ts.Seconds}s");
                 });
+
+
+                List<TimePeriod> touches = history.GetTouchTimePeriods();
+
+                UI.Label($"Total touches: {touches.Count}");
+
+                touches.ForEach(t =>
+                {
+                    UI.Label($"Start: {t.Begin} End: {t.End}");
+                });
+
                 UI.WindowEnd();
             }
         }
