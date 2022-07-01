@@ -34,9 +34,9 @@ namespace StereoKitApp
             SpiderModelF = Model.FromFile("spiderF.glb");
             SpiderModelG = Model.FromFile("spiderG/scene.gltf");
 
-            IconClose   = Sprite.FromFile("Icons/outline_close_white_24dp.png");
-            IconDown    = Sprite.FromFile("Icons/outline_arrow_downward_white_24dp.png");
-            IconUp      = Sprite.FromFile("Icons/outline_arrow_upward_white_24dp.png");
+            IconClose   = Sprite.FromFile("icons/outline_close_white_24dp.png");
+            IconDown    = Sprite.FromFile("icons/outline_arrow_downward_white_24dp.png");
+            IconUp      = Sprite.FromFile("icons/outline_arrow_upward_white_24dp.png");
         }
 
         public static Asset Instance
