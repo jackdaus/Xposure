@@ -39,6 +39,12 @@ namespace StereoKitApp
             _sessionInProgress = false;
         }
 
+        public void resetHistory()
+        {
+            _sessions.Clear();
+            _touches.Clear();
+        }
+
         public List<LevelTimePeriod> GetSessionSpans()
         {
             // Create copy of list

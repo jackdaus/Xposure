@@ -36,7 +36,11 @@ namespace StereoKitApp
                 UI.HSeparator();
 
                 UI.PushTint(Red);
-                if (UI.ButtonRoundAt("Exit Report", Asset.Instance.IconClose, new Vec3(-0.035f, -0.01f, 0), 0.02f)) _windowVisible = false;
+                if (UI.ButtonRoundAt("Exit Report", Asset.Instance.IconClose, new Vec3(-0.035f, -0.01f, 0), 0.02f))
+                {
+                    _windowVisible = false;
+                    history.resetHistory();
+                }
                 UI.PopTint();
 
                 history.GetSessionSpans().ForEach(s =>
