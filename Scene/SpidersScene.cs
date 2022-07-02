@@ -1,4 +1,5 @@
 using StereoKit;
+using StereoKitApp.Scene;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,8 +8,9 @@ namespace StereoKitApp
 {
     public class SpidersScene : IScene
     {
+        private int _currentLevel = 0;
         private List<Spider> spiders = new List<Spider>();
-
+        private Objective[] levelObjectives = new Objective[9];
         public SpidersScene()
         {
         }
@@ -32,10 +34,12 @@ namespace StereoKitApp
         public void Step() 
         {
             spiders.ForEach(sp => sp.Step());
+            levelObjectives[this._currentLevel].Step();
         }
 
         public void SetCurrentLevel(int level)
         {
+            this._currentLevel = level;
             spiders.ForEach(sp => sp.Level = level);
         }
 
@@ -43,6 +47,16 @@ namespace StereoKitApp
         {
             // TODO design actual levels
             return 9; 
+        }
+
+        public void setObjective( int level, int type, int goal )
+        {
+            levelObjectives[level-1] = new Objective(type, goal);
+        }
+
+        public bool IsObjectiveCompleted( int level )
+        {
+            return this.levelObjectives[level - 1].IsGoalReached;
         }
 
         public bool HandIsTouchingAnyPhobicStimulus()

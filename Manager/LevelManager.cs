@@ -29,7 +29,7 @@ namespace StereoKitApp
                 recordLooks();
             }
 
-            _report.Step(_history);
+                _report.Step(_history);
             
             UI.WindowBegin("XposuRe", ref _windowPose);
 
@@ -49,12 +49,11 @@ namespace StereoKitApp
                 {
                     UI.Label($"Level {_currentSceneLevel} out of {_scene.GetMaxLevel()}");
                     UI.SameLine();
-                    if (UI.ButtonRound("Down", Asset.Instance.IconDown) && _currentSceneLevel > 0) 
-                        changeLevel(_currentSceneLevel - 1);
-                    UI.SameLine();
-                    if (UI.ButtonRound("Up", Asset.Instance.IconUp) && _currentSceneLevel < _scene.GetMaxLevel()) 
-                        changeLevel(_currentSceneLevel + 1);
-
+                    if (_scene.IsObjectiveCompleted(_currentSceneLevel) && _currentSceneLevel < _scene.GetMaxLevel())
+                    {
+                        if(UI.ButtonRound("Up", Asset.Instance.IconUp))
+                            changeLevel(_currentSceneLevel + 1);
+                    }
                     if (UI.Button("Done")) 
                         stopScene();
 
@@ -85,6 +84,15 @@ namespace StereoKitApp
             {
                 case PhobiaType.Spider:
                     _scene = new SpidersScene();
+                    _scene.setObjective(1, 1, 5);
+                    _scene.setObjective(2, 2, 5);
+                    _scene.setObjective(3, 1, 15);
+                    _scene.setObjective(4, 1, 20);
+                    _scene.setObjective(5, 2, 20);
+                    _scene.setObjective(6, 1, 30);
+                    _scene.setObjective(7, 1, 10);
+                    _scene.setObjective(8, 2, 20);
+                    _scene.setObjective(9, 1, 30);
                     break;
                 case PhobiaType.Bee:
                     // TODO
