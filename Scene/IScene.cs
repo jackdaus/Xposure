@@ -16,5 +16,6 @@ namespace StereoKitApp
 
         // TODO maybe turn this into a base class and have this method be inheritted? 
         bool HandIsTouchingAnyPhobicStimulus();
+        bool PatientIsLookingAtAnyPhobicStimulus();
     }
 }

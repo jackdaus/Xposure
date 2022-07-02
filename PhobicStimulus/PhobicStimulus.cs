@@ -30,6 +30,7 @@ namespace StereoKitApp
         public bool RoamingOn { get => _roamingOn; set => _roamingOn = value; }
 
         public float Scale { get; set; } = 3;
+        public float SightScale { get; set; } = 3;
 
         /// <summary>
         /// Current level of the model
@@ -141,6 +142,7 @@ namespace StereoKitApp
                 // Draw a UI box to visualize the solid
                 Mesh box = Mesh.GenerateCube(_activeModel.Bounds.dimensions);
                 box.Draw(Material.UIBox, sPose.ToMatrix(Scale));
+                box.Draw(Material.UIBox, sPose.ToMatrix(Scale*SightScale));
 
                 // Window for debug controls
                 UI.WindowBegin($"PSTIM_DEBUG_{_id}", ref _debugWindowPose);
@@ -204,6 +206,16 @@ namespace StereoKitApp
             var bounds = new Bounds(_solid.GetPose().position, _activeModel.Bounds.dimensions * Scale);
 
             return (bounds.Contains(fingerTipR.position) || bounds.Contains(fingerTipL.position));
+        }
+
+        public bool PatientIsLooking()
+        {
+            Pose patientHead = Input.Head;
+            Ray patientSightRay = patientHead.Ray;
+            var bounds = new Bounds(_solid.GetPose().position, _activeModel.Bounds.dimensions * (Scale * SightScale));
+
+            Vec3 at = new Vec3();
+            return patientSightRay.Intersect(bounds, out at);
         }
 
         // TODO make this compatible with other PhobicStimulus sub-classes

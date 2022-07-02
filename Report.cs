@@ -59,6 +59,15 @@ namespace StereoKitApp
                     UI.Label($"Start: {t.Begin} End: {t.End}");
                 });
 
+                List<TimePeriod> looks = history.GetLookTimePeriods();
+
+                UI.Label($"Total looks: {looks.Count}");
+
+                looks.ForEach(t =>
+                {
+                    UI.Label($"Start: {t.Begin} End: {t.End}");
+                });
+
                 UI.WindowEnd();
             }
         }

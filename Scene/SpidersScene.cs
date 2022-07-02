@@ -55,5 +55,16 @@ namespace StereoKitApp
 
             return false;
         }
+
+        public bool PatientIsLookingAtAnyPhobicStimulus()
+        {
+            foreach (var sp in spiders)
+            {
+                if (sp.PatientIsLooking())
+                    return true;
+            }
+
+            return false;
+        }
     }
 }

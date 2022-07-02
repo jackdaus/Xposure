@@ -9,8 +9,10 @@ namespace StereoKitApp
     {
         private List<LevelTimePeriod> _sessions = new List<LevelTimePeriod>();
         private List<TimePeriod> _touches = new List<TimePeriod>();
+        private List<TimePeriod> _looks = new List<TimePeriod>();
         private bool _sessionInProgress;
         private bool _touchingInProgress;
+        private bool _lookingInProgress;
 
         public void BeginSession(int level)
         {
@@ -43,6 +45,7 @@ namespace StereoKitApp
         {
             _sessions.Clear();
             _touches.Clear();
+            _looks.Clear();
         }
 
         public List<LevelTimePeriod> GetSessionSpans()
@@ -109,6 +112,37 @@ namespace StereoKitApp
         {
             // create copy of list
             return _touches.ToList();
+        }
+
+        public void BeginLookPeriod()
+        {
+            if (_lookingInProgress)
+                throw new ApplicationException("Look already in progress!");
+
+            TimePeriod period = new TimePeriod();
+            period.Begin = DateTime.Now;
+            _looks.Add(period);
+
+            _lookingInProgress = true;
+        }
+
+        public void EndLookPeriod()
+        {
+            if (!_lookingInProgress)
+                throw new ApplicationException("No look in progress!");
+
+            var period = _looks.Last();
+            period.End = DateTime.Now;
+            _looks.RemoveAt(_looks.Count - 1);
+            _looks.Add(period);
+
+            _lookingInProgress = false;
+        }
+
+        public List<TimePeriod> GetLookTimePeriods()
+        {
+            // create copy of list
+            return _looks.ToList();
         }
     }
 }

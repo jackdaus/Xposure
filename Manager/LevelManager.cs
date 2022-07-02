@@ -14,6 +14,7 @@ namespace StereoKitApp
         private SessionHistory _history = new SessionHistory();
         private Report _report = new Report();
         private bool _wasJustTouching = false;
+        private bool _wasJustLooking = false;
 
         public LevelManager()
         { 
@@ -25,6 +26,7 @@ namespace StereoKitApp
             {
                 _scene.Step();
                 recordTouches();
+                recordLooks();
             }
 
             _report.Step(_history);
@@ -140,6 +142,30 @@ namespace StereoKitApp
                 _history.EndTouchPeriod();
 
                 _wasJustTouching = false;
+            }
+        }
+
+        private void recordLooks()
+        {
+            // TODO add a debounce
+            if (_scene.PatientIsLookingAtAnyPhobicStimulus())
+            {
+                if (!_wasJustLooking)
+                {
+                    // Just touched!
+                    //Log.Info($"Just Touched! {DateTime.Now.Ticks}");
+                    _history.BeginLookPeriod();
+
+                    _wasJustLooking = true;
+                }
+            }
+            else if (_wasJustLooking)
+            {
+                // Just untouched!
+                //Log.Info($"Just Untouched! {DateTime.Now.Ticks}");
+                _history.EndLookPeriod();
+
+                _wasJustLooking = false;
             }
         }
 
