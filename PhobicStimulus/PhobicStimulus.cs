@@ -197,11 +197,13 @@ namespace StereoKitApp
         /// <returns></returns>
         public bool HandIsTouching()
         {
-            Hand hand = Input.Hand(Handed.Right);
-            Pose fingerTip = hand[FingerId.Index, JointId.Tip].Pose;
+            Hand handR = Input.Hand(Handed.Right);
+            Hand handL = Input.Hand(Handed.Left);
+            Pose fingerTipR = handR[FingerId.Index, JointId.Tip].Pose;
+            Pose fingerTipL = handL[FingerId.Index, JointId.Tip].Pose;
             var bounds = new Bounds(_solid.GetPose().position, _activeModel.Bounds.dimensions * Scale);
 
-            return bounds.Contains(fingerTip.position);
+            return (bounds.Contains(fingerTipR.position) || bounds.Contains(fingerTipL.position));
         }
 
         // TODO make this compatible with other PhobicStimulus sub-classes
