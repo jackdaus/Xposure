@@ -6,7 +6,7 @@ namespace StereoKitApp
 	public class App
 	{
 		public SKSettings Settings => new SKSettings { 
-			appName           = "XposuRe",
+			appName           = "XposuRe Therapy",
 			assetsFolder      = "Assets",
 			displayPreference = DisplayMode.MixedReality
 		};
@@ -38,10 +38,6 @@ namespace StereoKitApp
 			lvlManager = new LevelManager();
 		}
 
-
-		// temp
-		Pose windowPose = new Pose(0.5f, 0, -0.5f, Quat.LookDir(-1, 0, 1));
-
 		public void Step()
 		{
 			DebugTools.Step();
@@ -51,16 +47,6 @@ namespace StereoKitApp
                 Default.MeshCube.Draw(floorMaterial, floorTransform);
 
             lvlManager.Step();
-
-            // passthrough
-            UI.WindowBegin("Passthrough Settings", ref windowPose);
-            bool toggle = App.passthrough.EnabledPassthrough;
-            UI.Label(App.passthrough.Available
-                ? "Passthrough EXT available!"
-                : "No passthrough EXT available :(");
-            if (UI.Toggle("Passthrough", ref toggle))
-                App.passthrough.EnabledPassthrough = toggle;
-            UI.WindowEnd();
         }
 	}
 }

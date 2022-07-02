@@ -29,10 +29,20 @@ namespace StereoKitApp
                 recordLooks();
             }
 
-                _report.Step(_history);
-            
-            UI.WindowBegin("XposuRe", ref _windowPose);
+            _report.Step(_history);
 
+            UI.WindowBegin("XposuRe Therapy", ref _windowPose);
+
+                // Passthrough toggle
+                if (App.passthrough.Available)
+                {
+                    bool toggle = App.passthrough.EnabledPassthrough;
+                    if (UI.ButtonRound("Passthrough", Asset.Instance.IconEye))
+                        App.passthrough.EnabledPassthrough = !App.passthrough.EnabledPassthrough;
+                    UI.HSeparator();
+                }
+                
+                // Phobia selection
                 if (!_selectedPhobiaType.HasValue)
                 {
                     UI.Label("Start a scenario");
@@ -45,13 +55,14 @@ namespace StereoKitApp
                     if (UI.Button("Claustrophobia"))
                         initScene(PhobiaType.Claustrophobia);
                 }
+                // Level controls
                 else
                 {
                     UI.Label($"Level {_currentSceneLevel} out of {_scene.GetMaxLevel()}");
                     UI.SameLine();
                     if (_scene.IsObjectiveCompleted(_currentSceneLevel) && _currentSceneLevel < _scene.GetMaxLevel())
                     {
-                        if(UI.ButtonRound("Up", Asset.Instance.IconUp))
+                        if (UI.ButtonRound("Up", Asset.Instance.IconUp))
                             changeLevel(_currentSceneLevel + 1);
                     }
                     if (UI.Button("Done")) 
@@ -62,13 +73,17 @@ namespace StereoKitApp
                     UI.Label($"{currentLevelTime.Minutes}m {currentLevelTime.Seconds}s");
                 }
 
-
+                // View report button
                 if (_history.Any() && !_selectedPhobiaType.HasValue && !_report.IsVisible())
                 {
                     UI.HSeparator();
                     if (UI.Button("View Report"))
                         _report.MakeVisible(_windowPose);
                 }
+
+                // Quit button
+                if (UI.ButtonImg("Quit", Asset.Instance.IconPower))
+                    SK.Quit();
 
             UI.WindowEnd();
         }

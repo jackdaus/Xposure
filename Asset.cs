@@ -22,6 +22,8 @@ namespace StereoKitApp
 
         public Sprite IconClose { get; }
         public Sprite IconDown { get; }
+        public Sprite IconEye { get; }
+        public Sprite IconPower { get; }
         public Sprite IconUp { get; }
 
         Asset()
@@ -36,6 +38,8 @@ namespace StereoKitApp
 
             IconClose   = Sprite.FromFile("icons/outline_close_white_24dp.png");
             IconDown    = Sprite.FromFile("icons/outline_arrow_downward_white_24dp.png");
+            IconEye     = Sprite.FromFile("icons/outline_visibility_white_24dp.png");
+            IconPower   = Sprite.FromFile("icons/outline_power_settings_new_white_24dp.png");
             IconUp      = Sprite.FromFile("icons/outline_arrow_upward_white_24dp.png");
         }
 

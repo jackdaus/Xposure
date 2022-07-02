@@ -17,7 +17,7 @@ namespace StereoKitApp.Scene
         private DateTime _lastGoalUpdate = DateTime.Now;
 
         // debug
-        private Pose _debugWindowPose = new Pose(-0.3f, 0.6f, 0f, Quat.LookDir(0, 0, 1));
+        private Pose _debugWindowPose = new Pose(-0.3f, 0f, 0.6f, Quat.LookDir(0, 0, 1));
         private Guid _id = Guid.NewGuid();
         public Objective(int type, int goal)
         {
