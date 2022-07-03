@@ -20,7 +20,6 @@ namespace StereoKitApp
 		public void Init()
 		{
 			DebugTools.Init();
-			DebugTools.DEBUG_TOOLS_ON = true;
 
 			// Create assets used by the app
 			Vec3 floorPosition = new Vec3(0, Util.FloorHeight, 0);

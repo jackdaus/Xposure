@@ -33,57 +33,62 @@ namespace StereoKitApp
 
             UI.WindowBegin("XposuRe Therapy", ref _windowPose);
 
-                // Passthrough toggle
-                if (App.passthrough.Available)
-                {
-                    bool toggle = App.passthrough.EnabledPassthrough;
-                    if (UI.ButtonRound("Passthrough", Asset.Instance.IconEye))
-                        App.passthrough.EnabledPassthrough = !App.passthrough.EnabledPassthrough;
-                    UI.HSeparator();
-                }
+            // Passthrough toggle
+            if (App.passthrough.Available)
+            {
+                bool toggle = App.passthrough.EnabledPassthrough;
+                if (UI.ButtonRound("Passthrough", Asset.Instance.IconEye))
+                    App.passthrough.EnabledPassthrough = !App.passthrough.EnabledPassthrough;
+                UI.HSeparator();
+            }
                 
-                // Phobia selection
-                if (!_selectedPhobiaType.HasValue)
-                {
-                    UI.Label("Start a scenario");
-                    if (UI.Button("Spider"))    
-                        initScene(PhobiaType.Spider);
-                    UI.SameLine();
-                    if (UI.Button("Bee"))       
-                        initScene(PhobiaType.Bee);
-                    UI.SameLine();
-                    if (UI.Button("Claustrophobia"))
-                        initScene(PhobiaType.Claustrophobia);
-                }
-                // Level controls
-                else
-                {
-                    UI.Label($"Level {_currentSceneLevel} out of {_scene.GetMaxLevel()}");
-                    UI.SameLine();
-                    if (_scene.IsObjectiveCompleted(_currentSceneLevel) && _currentSceneLevel < _scene.GetMaxLevel())
-                    {
-                        if (UI.ButtonRound("Up", Asset.Instance.IconUp))
-                            changeLevel(_currentSceneLevel + 1);
-                    }
-                    if (UI.Button("Done")) 
-                        stopScene();
+            // Phobia selection
+            if (!_selectedPhobiaType.HasValue)
+            {
+                UI.Label("Start a scenario");
+                if (UI.Button("Spider"))    
+                    initScene(PhobiaType.Spider);
+                UI.SameLine();
+                if (UI.Button("Bee"))       
+                    initScene(PhobiaType.Bee);
+                UI.SameLine();
+                if (UI.Button("Claustrophobia"))
+                    initScene(PhobiaType.Claustrophobia);
 
-                    TimeSpan currentLevelTime = _history.GetCurrentLevelTime();
-                    UI.SameLine();
-                    UI.Label($"{currentLevelTime.Minutes}m {currentLevelTime.Seconds}s");
-                }
+                // Quit button
+                UI.HSeparator();
+                UI.PushTint(Util.Colors.Red);
+                    if (UI.ButtonRound("shut_down", Asset.Instance.IconPower))
+                        SK.Quit();
+                UI.PopTint();
 
                 // View report button
-                if (_history.Any() && !_selectedPhobiaType.HasValue && !_report.IsVisible())
+                if (_history.Any() && !_report.IsVisible())
                 {
-                    UI.HSeparator();
+                    UI.SameLine();
                     if (UI.Button("View Report"))
                         _report.MakeVisible(_windowPose);
                 }
+            }
+            // Level controls
+            else
+            {
+                UI.Label($"Level {_currentSceneLevel} out of {_scene.GetMaxLevel()}");
+                UI.SameLine();
+                if (_scene.IsObjectiveCompleted(_currentSceneLevel) && _currentSceneLevel < _scene.GetMaxLevel())
+                {
+                    UI.PushTint(Util.Colors.Green);
+                    if (UI.ButtonRound("Up", Asset.Instance.IconUp))
+                        changeLevel(_currentSceneLevel + 1);
+                    UI.PopTint();
+                }
+                if (UI.Button("Done")) 
+                    stopScene();
 
-                // Quit button
-                if (UI.ButtonImg("Quit", Asset.Instance.IconPower))
-                    SK.Quit();
+                TimeSpan currentLevelTime = _history.GetCurrentLevelTime();
+                UI.SameLine();
+                UI.Label($"{currentLevelTime.Minutes}m {currentLevelTime.Seconds}s");
+            }
 
             UI.WindowEnd();
         }
@@ -110,8 +115,16 @@ namespace StereoKitApp
                     _scene.setObjective(9, 1, 30);
                     break;
                 case PhobiaType.Bee:
-                    // TODO
-                    _scene = new SpidersScene();
+                    _scene = new BeeScene();
+                    _scene.setObjective(1, 1, 5);
+                    _scene.setObjective(2, 2, 5);
+                    _scene.setObjective(3, 1, 15);
+                    _scene.setObjective(4, 1, 20);
+                    _scene.setObjective(5, 2, 20);
+                    _scene.setObjective(6, 1, 30);
+                    _scene.setObjective(7, 1, 10);
+                    _scene.setObjective(8, 2, 20);
+                    _scene.setObjective(9, 1, 30);
                     break;
                 case PhobiaType.Claustrophobia:
                     // TODO

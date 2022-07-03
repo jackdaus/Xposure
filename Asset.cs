@@ -11,7 +11,7 @@ namespace StereoKitApp
         // Simple, thread-safe Singleton pattern adapted from https://csharpindepth.com/Articles/Singleton
         private static Asset instance = null;
         private static readonly object padlock = new object();
-        
+
         public Model SpiderModelA { get; }
         public Model SpiderModelB { get; }
         public Model SpiderModelC { get; }
@@ -19,6 +19,8 @@ namespace StereoKitApp
         public Model SpiderModelE { get; }
         public Model SpiderModelF { get; }
         public Model SpiderModelG { get; }
+
+        public Model Bee { get; }
 
         public Sprite IconClose { get; }
         public Sprite IconDown { get; }
@@ -35,6 +37,8 @@ namespace StereoKitApp
             SpiderModelE = Model.FromFile("spiderE.glb");
             SpiderModelF = Model.FromFile("spiderF.glb");
             SpiderModelG = Model.FromFile("spiderG/scene.gltf");
+
+            Bee = Model.FromFile("bee.glb");
 
             IconClose   = Sprite.FromFile("icons/outline_close_white_24dp.png");
             IconDown    = Sprite.FromFile("icons/outline_arrow_downward_white_24dp.png");

@@ -79,7 +79,7 @@ namespace StereoKitApp
             // The initial position of the object
             _solid = new Solid(V.XYZ(0, 0, -1), Quat.Identity);
 
-            // Use the last model's bounds since it looks the best
+            // Use the last model's bounds since it looks the best. TODO each model should have it's own bounding box, ideally
             _solid.AddBox(models.Last().Bounds.dimensions * Scale, 1);
         }
 
@@ -156,6 +156,8 @@ namespace StereoKitApp
 
                 UI.Toggle($"IsRoaming_{_id}", ref _roamingOn);
 
+                UI.Label($"Type: {GetType()}");
+
                 float scaleVal = Scale;
                 UI.Label($"Scale: {scaleVal}");
                 UI.HSlider($"Scale_{_id}", ref scaleVal, 0, 10, 0.01f);
@@ -222,13 +224,13 @@ namespace StereoKitApp
         private void syncAnimation()
         {
             // last level has animations
-            if (_level == _maxModelLevel)
-            {
-                if (_isWalking)
-                    _activeModel.PlayAnim("walk_ani_vor", AnimMode.Loop);
-                else
-                    _activeModel.PlayAnim("warte_pose", AnimMode.Loop);
-            }
+            //if (_level == _maxModelLevel)
+            //{
+            //    if (_isWalking)
+            //        _activeModel.PlayAnim("walk_ani_vor", AnimMode.Loop);
+            //    else
+            //        _activeModel.PlayAnim("warte_pose", AnimMode.Loop);
+            //}
         }
 
     }
