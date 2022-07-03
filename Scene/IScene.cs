@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -13,11 +13,12 @@ namespace StereoKitApp
         void SetCurrentLevel(int level);
 
         int GetMaxLevel();
-        void setObjective( int level, int type, int goal);
-        public bool IsObjectiveCompleted(int level);
+
 
         // TODO maybe turn this into a base class and have this method be inheritted? 
         bool HandIsTouchingAnyPhobicStimulus();
         bool PatientIsLookingAtAnyPhobicStimulus();
+        List<IObjective> GetObjectives();
+        bool AllObjectivesComplete();
     }
 }

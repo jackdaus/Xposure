@@ -7,43 +7,47 @@ namespace StereoKitApp
 {
     public class SessionHistory
     {
-        private List<LevelTimePeriod> _sessions = new List<LevelTimePeriod>();
+        private List<LevelTimePeriod> _levelHistories = new List<LevelTimePeriod>();
         private List<TimePeriod> _touches = new List<TimePeriod>();
         private List<TimePeriod> _looks = new List<TimePeriod>();
-        private bool _sessionInProgress;
+        private bool _levelInProgress;
         private bool _touchingInProgress;
         private bool _lookingInProgress;
 
         public void BeginSession(int level)
         {
-            if (_sessionInProgress)
+            if (_levelInProgress)
                 throw new ApplicationException("Session already in progress!");
 
-            var session = new LevelTimePeriod();
-            session.Begin = DateTime.Now;
-            session.Level = level;
-            _sessions.Add(session);
+            var levelHistory = new LevelTimePeriod
+            {
+                Begin = DateTime.Now,
+                Level = level
+            };
+
+            _levelHistories.Add(levelHistory);
             
-            _sessionInProgress = true;
+            _levelInProgress = true;
         }
 
         public void EndSession()
         {
-            if (!_sessionInProgress)
+            if (!_levelInProgress)
                 throw new ApplicationException("No session is in progress!");
 
-            var currentSession = _sessions.Last();
-            currentSession.End = DateTime.Now;
+            var currentLevel = _levelHistories.Last();
+            currentLevel.End = DateTime.Now;
 
-            _sessions.RemoveAt(_sessions.Count - 1);
-            _sessions.Add(currentSession);
+            // Remove old record and replace with new record
+            _levelHistories.RemoveAt(_levelHistories.Count - 1);
+            _levelHistories.Add(currentLevel);
             
-            _sessionInProgress = false;
+            _levelInProgress = false;
         }
 
-        public void resetHistory()
+        public void ResetHistory()
         {
-            _sessions.Clear();
+            _levelHistories.Clear();
             _touches.Clear();
             _looks.Clear();
         }
@@ -51,13 +55,13 @@ namespace StereoKitApp
         public List<LevelTimePeriod> GetSessionSpans()
         {
             // Create copy of list
-            return _sessions.ToList();
+            return _levelHistories.ToList();
         }
 
         public TimeSpan GetTotalTime()
         {
             TimeSpan totalTime = new TimeSpan();
-            _sessions.ForEach(session =>
+            _levelHistories.ForEach(session =>
             {
                 totalTime = totalTime.Add(session.GetTimeSpan());
             });
@@ -67,20 +71,20 @@ namespace StereoKitApp
 
         public TimeSpan GetCurrentLevelTime()
         {
-            if (!_sessionInProgress)
+            if (!_levelInProgress)
                 return new TimeSpan();
 
-            return DateTime.Now - _sessions.Last().Begin;
+            return DateTime.Now - _levelHistories.Last().Begin;
         }
 
-        public bool HasActiveSession()
+        public bool HasActiveLevel()
         {
-            return _sessionInProgress;
+            return _levelInProgress;
         }
 
         public bool Any()
         {
-            return _sessions.Count() > 0;
+            return _levelHistories.Count() > 0;
         }
 
         public void BeginTouchPeriod()

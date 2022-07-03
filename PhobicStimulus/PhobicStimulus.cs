@@ -11,7 +11,7 @@ namespace StereoKitApp
         protected List<Model> models = new List<Model>();
         private Solid _solid;
         private readonly Random _random = new Random();
-        private int _level = 0;
+        private int _modelIntensity = 0;
         private Model _activeModel;
         private int _maxModelLevel { get => models.Count - 1; }
 
@@ -33,21 +33,21 @@ namespace StereoKitApp
         public float SightScale { get; set; } = 3;
 
         /// <summary>
-        /// Current level of the model
+        /// Level of realism of the model
         /// </summary>
-        public int Level
+        public int ModelIntensity
         {
-            get { return _level; }
+            get { return _modelIntensity; }
             set
             {
-                if (_level < 0)
-                    throw new ArgumentOutOfRangeException(nameof(Level), "The Level must be greater than or equal to 0");
+                if (_modelIntensity < 0)
+                    throw new ArgumentOutOfRangeException(nameof(ModelIntensity), "The ModelIntensity must be greater than or equal to 0");
 
-                if (_level + 1 > models.Count)
-                    throw new IndexOutOfRangeException($"The Level {_level} does not exist. The maximum Level is {models.Count - 1}");
+                if (_modelIntensity + 1 > models.Count)
+                    throw new IndexOutOfRangeException($"The ModelIntensity {_modelIntensity} does not exist. The maximum ModelIntensity is {models.Count - 1}");
 
-                _level = value;
-                _activeModel = models[_level];
+                _modelIntensity = value;
+                _activeModel = models[_modelIntensity];
 
                 // sync model animation to the current animation state
                 syncAnimation();
@@ -74,7 +74,7 @@ namespace StereoKitApp
         public void Init()
         {
             InitModels();
-            Level = 1;
+            ModelIntensity = 1;
 
             // The initial position of the object
             _solid = new Solid(V.XYZ(0, 0, -1), Quat.Identity);
@@ -146,13 +146,13 @@ namespace StereoKitApp
 
                 // Window for debug controls
                 UI.WindowBegin($"PSTIM_DEBUG_{_id}", ref _debugWindowPose);
-                UI.Label($"Level: {Level}");
+                UI.Label($"Level: {ModelIntensity}");
                 UI.SameLine();
-                if (UI.ButtonRound($"Down_{_id}", Asset.Instance.IconDown) && _level > 0)
-                    Level--;
+                if (UI.ButtonRound($"Down_{_id}", Asset.Instance.IconDown) && _modelIntensity > 0)
+                    ModelIntensity--;
                 UI.SameLine();
-                if (UI.ButtonRound($"Up_{_id}", Asset.Instance.IconUp) && _level < _maxModelLevel)
-                    Level++;
+                if (UI.ButtonRound($"Up_{_id}", Asset.Instance.IconUp) && _modelIntensity < _maxModelLevel)
+                    ModelIntensity++;
 
                 UI.Toggle($"IsRoaming_{_id}", ref _roamingOn);
 
@@ -223,14 +223,14 @@ namespace StereoKitApp
         // TODO make this compatible with other PhobicStimulus sub-classes
         private void syncAnimation()
         {
-            // last level has animations
-            //if (_level == _maxModelLevel)
-            //{
-            //    if (_isWalking)
-            //        _activeModel.PlayAnim("walk_ani_vor", AnimMode.Loop);
-            //    else
-            //        _activeModel.PlayAnim("warte_pose", AnimMode.Loop);
-            //}
+            // last spider level has animations
+            if (_modelIntensity == _maxModelLevel)
+            {
+                if (_isWalking)
+                    _activeModel.PlayAnim("walk_ani_vor", AnimMode.Loop);
+                else
+                    _activeModel.PlayAnim("warte_pose", AnimMode.Loop);
+            }
         }
 
     }

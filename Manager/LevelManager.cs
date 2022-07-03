@@ -34,11 +34,11 @@ namespace StereoKitApp
             UI.WindowBegin("XposuRe Therapy", ref _windowPose);
 
             // Passthrough toggle
-            if (App.passthrough.Available)
+            if (App.Passthrough.Available)
             {
-                bool toggle = App.passthrough.EnabledPassthrough;
+                bool toggle = App.Passthrough.EnabledPassthrough;
                 if (UI.ButtonRound("Passthrough", Asset.Instance.IconEye))
-                    App.passthrough.EnabledPassthrough = !App.passthrough.EnabledPassthrough;
+                    App.Passthrough.EnabledPassthrough = !App.Passthrough.EnabledPassthrough;
                 UI.HSeparator();
             }
                 
@@ -74,15 +74,28 @@ namespace StereoKitApp
             else
             {
                 UI.Label($"Level {_currentSceneLevel} out of {_scene.GetMaxLevel()}");
-                UI.SameLine();
-                if (_scene.IsObjectiveCompleted(_currentSceneLevel) && _currentSceneLevel < _scene.GetMaxLevel())
+                if (_scene.AllObjectivesComplete() && _currentSceneLevel < _scene.GetMaxLevel())
                 {
+                    UI.SameLine();
                     UI.PushTint(Util.Colors.Green);
                     if (UI.ButtonRound("Up", Asset.Instance.IconUp))
                         changeLevel(_currentSceneLevel + 1);
                     UI.PopTint();
                 }
-                if (UI.Button("Done")) 
+
+                UI.Label("Objectives:");
+                _scene.GetObjectives().ForEach(o =>
+                {
+                    //UI.PushTextStyle(App.GreenTextStyle);
+                    //UI.Label(o.IsCompleted(_history) ? "" : "");
+                    //UI.PopTextStyle();
+                    //UI.SameLine();
+                    UI.Label((o.IsCompleted(_history) ? Util.SpecialChars.CheckboxCompositeReversed : Util.SpecialChars.Checkbox) 
+                        + $"\t{ o.Description}");
+                });
+
+                UI.HSeparator();
+                if (UI.Button("Exit")) 
                     stopScene();
 
                 TimeSpan currentLevelTime = _history.GetCurrentLevelTime();
@@ -103,32 +116,14 @@ namespace StereoKitApp
             switch (type)
             {
                 case PhobiaType.Spider:
-                    _scene = new SpidersScene();
-                    _scene.setObjective(1, 1, 5);
-                    _scene.setObjective(2, 2, 5);
-                    _scene.setObjective(3, 1, 15);
-                    _scene.setObjective(4, 1, 20);
-                    _scene.setObjective(5, 2, 20);
-                    _scene.setObjective(6, 1, 30);
-                    _scene.setObjective(7, 1, 10);
-                    _scene.setObjective(8, 2, 20);
-                    _scene.setObjective(9, 1, 30);
+                    _scene = new SpidersScene(_history);
                     break;
                 case PhobiaType.Bee:
-                    _scene = new BeeScene();
-                    _scene.setObjective(1, 1, 5);
-                    _scene.setObjective(2, 2, 5);
-                    _scene.setObjective(3, 1, 15);
-                    _scene.setObjective(4, 1, 20);
-                    _scene.setObjective(5, 2, 20);
-                    _scene.setObjective(6, 1, 30);
-                    _scene.setObjective(7, 1, 10);
-                    _scene.setObjective(8, 2, 20);
-                    _scene.setObjective(9, 1, 30);
+                    _scene = new BeeScene(_history);
                     break;
                 case PhobiaType.Claustrophobia:
                     // TODO
-                    _scene = new SpidersScene();
+                    throw new NotImplementedException();
                     break;
                 defaut:
                     throw new NotImplementedException();
@@ -144,7 +139,6 @@ namespace StereoKitApp
             _history.EndSession();
 
             _currentSceneLevel = 1;
-            _scene.SetCurrentLevel(0);
             _selectedPhobiaType = null;
         }
 

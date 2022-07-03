@@ -31,12 +31,12 @@ namespace StereoKitApp
             {
 				debugSpider1.Init();
 				debugSpider1.SetPosition(0f, 0, -0.5f);
-				debugSpider1.Level = 9;
+				debugSpider1.ModelIntensity = 9;
 				debugSpider1.RoamingOn = true;
 
 				debugSpider2.Init();
 				debugSpider1.SetPosition(0f, 0, -1f);
-				debugSpider1.Level = 9;
+				debugSpider1.ModelIntensity = 9;
 				debugSpider1.RoamingOn = true;
 			}
 
@@ -44,7 +44,7 @@ namespace StereoKitApp
             {
 				debugBee1.Init();
 				debugBee1.SetPosition(0f, 0, -0.5f);
-				debugBee1.Level = 4;
+				debugBee1.ModelIntensity = 4;
 				debugBee1.RoamingOn = false;
 			}
 		}
@@ -123,7 +123,7 @@ namespace StereoKitApp
 			UI.Text($"FPS: {fps}");
 			UI.Text($"World Has Bounds: {World.HasBounds}");
 			UI.Text($"World Bounds Height: {World.BoundsPose.position.y}");
-			UI.Text($"Passthrough Available: {App.passthrough.Available}");
+			UI.Text($"Passthrough Available: {App.Passthrough.Available}");
 			UI.WindowEnd();
 		}
 	}

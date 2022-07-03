@@ -62,7 +62,7 @@ namespace StereoKit_Android
 					throw new System.Exception("StereoKit loader couldn't construct an instance of the App!");
 
 				// Create passthrough stepper here. MUST be done before call to SK.Initialize
-				App.passthrough = SK.AddStepper(new PassthroughFBExt());
+				App.Passthrough = SK.AddStepper(new PassthroughFBExt());
 
 				// Initialize StereoKit, and the app
 				SKSettings settings = app.Settings;

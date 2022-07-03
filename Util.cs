@@ -22,5 +22,19 @@ namespace StereoKitApp
             public static readonly Color Blue     = new Color(0, 0, 1);
         }
 
+        // To add more characters, see http://modernicons.io/segoe-mdl2/cheatsheet/
+        // These characters work with the current version of StereoKit
+        public static class SpecialChars
+        {
+            /// <summary>
+            /// An empty checkbox
+            /// </summary>
+            public static readonly string Checkbox = "";
+
+            /// <summary>
+            /// A filled in checkbox
+            /// </summary>
+            public static readonly string CheckboxCompositeReversed = "";
+        }
     }
 }

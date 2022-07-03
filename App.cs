@@ -10,12 +10,15 @@ namespace StereoKitApp
 			assetsFolder      = "Assets",
 			displayPreference = DisplayMode.MixedReality
 		};
+		public static PassthroughFBExt Passthrough;
+		public static TextStyle GreenTextStyle;
+
 
 		Matrix floorTransform;
 		Material floorMaterial;
 		Solid floorSolid;
 		LevelManager lvlManager;
-		public static PassthroughFBExt passthrough;
+
 
 		public void Init()
 		{
@@ -35,6 +38,11 @@ namespace StereoKitApp
 			Input.HandSolid(Handed.Max, false);
 
 			lvlManager = new LevelManager();
+
+			GreenTextStyle = Text.MakeStyle(
+				Default.Font,
+				1 * U.cm,
+				Util.Colors.Green);
 		}
 
 		public void Step()
@@ -42,7 +50,7 @@ namespace StereoKitApp
 			DebugTools.Step();
 
 			// Only draw floor when using VR headset with no AR passthrough
-            if (SK.System.displayType == Display.Opaque && !App.passthrough.EnabledPassthrough)
+            if (SK.System.displayType == Display.Opaque && !App.Passthrough.EnabledPassthrough)
                 Default.MeshCube.Draw(floorMaterial, floorTransform);
 
             lvlManager.Step();

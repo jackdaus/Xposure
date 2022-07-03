@@ -39,7 +39,7 @@ namespace StereoKitApp
                 if (UI.ButtonRoundAt("Exit Report", Asset.Instance.IconClose, new Vec3(-0.035f, -0.01f, 0), 0.02f))
                 {
                     _windowVisible = false;
-                    history.resetHistory();
+                    history.ResetHistory();
                 }
                 UI.PopTint();
 

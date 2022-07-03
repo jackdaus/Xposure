@@ -1,18 +1,24 @@
 using StereoKit;
-using StereoKitApp.Scene;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace StereoKitApp
 {
     public class BeeScene : IScene
     {
-        private int _currentLevel = 0;
         private List<Bee> _bees = new List<Bee>();
-        private Objective[] _levelObjectives = new Objective[9];
-        public BeeScene()
+        private List<IObjective> _objectives = new List<IObjective>();
+
+        // TODO turn this into a service?
+        private SessionHistory _sessionHistory;
+
+        private BeeScene() { }
+
+        public BeeScene(SessionHistory history)
         {
+            _sessionHistory = history;
         }
 
         public void Init(int startingLevel)
@@ -27,36 +33,86 @@ namespace StereoKitApp
                 : new Vec3(0.25f, Util.FloorHeight + 0.05f, 0);
 
             bee.SetPosition(position);
-            bee.Level = startingLevel;
             _bees.Add(bee);
+
+            SetCurrentLevel(startingLevel);
         }
 
         public void Step() 
         {
             _bees.ForEach(sp => sp.Step());
-            _levelObjectives[this._currentLevel].Step();
         }
 
         public void SetCurrentLevel(int level)
         {
-            _currentLevel = level;
-            _bees.ForEach(sp => sp.Level = level);
+            if (level > GetMaxLevel())
+                throw new ArgumentOutOfRangeException();
+
+            switch (level)
+            {
+                case 1:
+                    // Level 1: One stationary M1 bee
+                    _bees.ForEach(sp =>
+                    {
+                        sp.ModelIntensity = 1;
+                        sp.RoamingOn = false;
+                    });
+
+                    // Objectives
+                    _objectives.Clear();
+                    _objectives.Add(new WaitObjective(5));
+
+                    break;
+                case 2:
+                    // Level 2: One roaming M1 bee
+                    _bees.ForEach(sp =>
+                    {
+                        sp.ModelIntensity = 1;
+                        sp.RoamingOn = true;
+                    });
+
+                    // Objectives
+                    _objectives.Clear();
+                    _objectives.Add(new WaitObjective(8));
+                    _objectives.Add(new TouchObjective(1));
+
+                    break;
+
+                case 3:
+                    // Level 3: One roaming M5 bee
+                    _bees.ForEach(sp =>
+                    {
+                        sp.ModelIntensity = 2;
+                        sp.RoamingOn = true;
+                    });
+
+                    // Objectives
+                    _objectives.Clear();
+                    _objectives.Add(new WaitObjective(5));
+
+                    break;
+                case 4:
+                    // Level 4: One roaming M4 bee
+                    _bees.ForEach(sp =>
+                    {
+                        sp.ModelIntensity = 4;
+                        sp.RoamingOn = true;
+                    });
+
+                    // Objectives
+                    _objectives.Clear();
+                    _objectives.Add(new WaitObjective(7));
+                    _objectives.Add(new TouchObjective(2));
+
+                    break;
+                default:
+                    throw new NotImplementedException();
+            }
         }
 
         public int GetMaxLevel()
         {
-            // TODO design actual levels
             return 4; 
-        }
-
-        public void setObjective( int level, int type, int goal )
-        {
-            _levelObjectives[level-1] = new Objective(type, goal);
-        }
-
-        public bool IsObjectiveCompleted( int level )
-        {
-            return _levelObjectives[level - 1].IsGoalReached;
         }
 
         public bool HandIsTouchingAnyPhobicStimulus()
@@ -79,6 +135,17 @@ namespace StereoKitApp
             }
 
             return false;
+        }
+
+        public List<IObjective> GetObjectives()
+        {
+            // Return copy of list
+            return _objectives.ToList();
+        }
+
+        public bool AllObjectivesComplete()
+        {
+            return _objectives.All(o => o.IsCompleted(_sessionHistory));
         }
     }
 }
