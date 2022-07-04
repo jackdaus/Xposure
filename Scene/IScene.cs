@@ -15,10 +15,11 @@ namespace StereoKitApp
         int GetMaxLevel();
 
 
-        // TODO maybe turn this into a base class and have this method be inheritted? 
+        // TODO maybe turn this into a base class and have these methods be inheritted? 
         bool HandIsTouchingAnyPhobicStimulus();
         bool PatientIsLookingAtAnyPhobicStimulus();
         List<IObjective> GetObjectives();
         bool AllObjectivesComplete();
+        float GetMinDistance();
     }
 }

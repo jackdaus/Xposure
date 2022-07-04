@@ -7,19 +7,19 @@ namespace StereoKitApp
 {
     public class SessionHistory
     {
-        private List<LevelTimePeriod> _levelHistories = new List<LevelTimePeriod>();
+        private List<LevelHistory> _levelHistories = new List<LevelHistory>();
         private List<TimePeriod> _touches = new List<TimePeriod>();
         private List<TimePeriod> _looks = new List<TimePeriod>();
         private bool _levelInProgress;
         private bool _touchingInProgress;
         private bool _lookingInProgress;
 
-        public void BeginSession(int level)
+        public void BeginLevel(int level)
         {
             if (_levelInProgress)
-                throw new ApplicationException("Session already in progress!");
+                throw new ApplicationException("Level already in progress!");
 
-            var levelHistory = new LevelTimePeriod
+            var levelHistory = new LevelHistory
             {
                 Begin = DateTime.Now,
                 Level = level
@@ -30,10 +30,10 @@ namespace StereoKitApp
             _levelInProgress = true;
         }
 
-        public void EndSession()
+        public void EndLevel()
         {
             if (!_levelInProgress)
-                throw new ApplicationException("No session is in progress!");
+                throw new ApplicationException("No level is in progress!");
 
             var currentLevel = _levelHistories.Last();
             currentLevel.End = DateTime.Now;
@@ -41,8 +41,21 @@ namespace StereoKitApp
             // Remove old record and replace with new record
             _levelHistories.RemoveAt(_levelHistories.Count - 1);
             _levelHistories.Add(currentLevel);
-            
+
             _levelInProgress = false;
+        }
+
+        public void UpdateLevelMinDistance(float distance)
+        {
+            if (!_levelInProgress)
+                throw new ApplicationException("No level is in progress!");
+
+            var currentLevel = _levelHistories.Last();
+            currentLevel.MinDistance = distance;
+
+            // Remove old record and replace with new record
+            _levelHistories.RemoveAt(_levelHistories.Count - 1);
+            _levelHistories.Add(currentLevel);
         }
 
         public void ResetHistory()
@@ -52,7 +65,7 @@ namespace StereoKitApp
             _looks.Clear();
         }
 
-        public List<LevelTimePeriod> GetSessionSpans()
+        public List<LevelHistory> GetLevelHistories()
         {
             // Create copy of list
             return _levelHistories.ToList();
@@ -75,6 +88,14 @@ namespace StereoKitApp
                 return new TimeSpan();
 
             return DateTime.Now - _levelHistories.Last().Begin;
+        }
+
+        public LevelHistory GetCurrentLevelHistory()
+        {
+            if (!_levelInProgress)
+                throw new ApplicationException("No level is in progress!");
+
+            return _levelHistories.Last();
         }
 
         public bool HasActiveLevel()

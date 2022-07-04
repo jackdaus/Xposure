@@ -40,10 +40,11 @@ namespace StereoKitApp
 
                 UI.HSeparator();
 
-                history.GetSessionSpans().ForEach(s =>
+                history.GetLevelHistories().ForEach(s =>
                 {
                     TimeSpan ts = s.GetTimeSpan();
                     UI.Label($"Level {s.Level}: {ts.Minutes}m {ts.Seconds}s");
+                    UI.Label($"MinDistance: {s.MinDistance}");
                 });
 
 

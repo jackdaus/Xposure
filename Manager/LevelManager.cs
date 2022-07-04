@@ -27,6 +27,7 @@ namespace StereoKitApp
                 _scene.Step();
                 recordTouches();
                 recordLooks();
+                recordMinDistance();
             }
 
             _report.Step(_history);
@@ -91,7 +92,7 @@ namespace StereoKitApp
                 });
 
                 // View Report
-                if (_currentSceneLevel == _scene.GetMaxLevel() && _scene.GetObjectives().TrueForAll(s => s.IsCompleted(_history)))
+                if (_currentSceneLevel == _scene.GetMaxLevel() && _scene.AllObjectivesComplete())
                 {
                     UI.Label("");
                     UI.Label("Completed!");
@@ -143,12 +144,12 @@ namespace StereoKitApp
             }
 
             _scene.Init(_currentSceneLevel);
-            _history.BeginSession(_currentSceneLevel);
+            _history.BeginLevel(_currentSceneLevel);
         }
 
         private void stopScene()
         {
-            _history.EndSession();
+            _history.EndLevel();
 
             _currentSceneLevel = 1;
             _selectedPhobiaType = null;
@@ -159,8 +160,8 @@ namespace StereoKitApp
             _currentSceneLevel = level;
             _scene.SetCurrentLevel(_currentSceneLevel);
 
-            _history.EndSession();
-            _history.BeginSession(_currentSceneLevel);
+            _history.EndLevel();
+            _history.BeginLevel(_currentSceneLevel);
         }
 
         private void recordTouches()
@@ -208,6 +209,20 @@ namespace StereoKitApp
                 _history.EndLookPeriod();
 
                 _wasJustLooking = false;
+            }
+        }
+
+        private void recordMinDistance()
+        {
+            if (_history.HasActiveLevel())
+            {
+                var currentMin = _scene.GetMinDistance();
+
+                LevelHistory currentHist = _history.GetCurrentLevelHistory();
+                if (currentMin < currentHist.MinDistance)
+                {
+                    _history.UpdateLevelMinDistance(currentMin);
+                }
             }
         }
 

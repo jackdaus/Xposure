@@ -166,8 +166,21 @@ namespace StereoKitApp
                 UI.Label($"x: {_solid.GetPose().position.x}");
                 UI.Label($"y: {_solid.GetPose().position.y}");
                 UI.Label($"z: {_solid.GetPose().position.z}");
+
+                var distance = Vec3.Distance(Input.Head.position, _solid.GetPose().position);
+                UI.Label($"Distance to user: {distance}");
+
                 UI.WindowEnd();
             }
+        }
+
+        /// <summary>
+        /// Get the model's position
+        /// </summary>
+        /// <returns></returns>
+        public Vec3 GetPosition()
+        {
+            return _solid.GetPose().position;
         }
 
         /// <summary>

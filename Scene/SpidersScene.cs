@@ -139,6 +139,11 @@ namespace StereoKitApp
             return false;
         }
 
+        public float GetMinDistance()
+        {
+            return _spiders.Min(sp => Vec3.Distance(sp.GetPosition(), Input.Head.position));
+        }
+
         public List<IObjective> GetObjectives()
         {
             // Return copy of list

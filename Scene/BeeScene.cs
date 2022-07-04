@@ -137,6 +137,11 @@ namespace StereoKitApp
             return false;
         }
 
+        public float GetMinDistance()
+        {
+            return _bees.Min(b => Vec3.Distance(b.GetPosition(), Input.Head.position));
+        }
+
         public List<IObjective> GetObjectives()
         {
             // Return copy of list
