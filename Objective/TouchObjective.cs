@@ -16,7 +16,7 @@ namespace StereoKitApp
 
         public bool IsCompleted(SessionHistory history)
         {
-            return history.GetTouchTimePeriods().Count >= TouchCount;
+            return history.GetCurrentLevelTouchTimePeriods().Count >= TouchCount;
         }
     }
 }

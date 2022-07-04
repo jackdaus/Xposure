@@ -15,7 +15,7 @@ namespace StereoKitApp
 
         public bool IsCompleted(SessionHistory history)
         {
-            return history.GetHoldPeriods().Any();
+            return history.GetCurrentLevelHoldTimePeriods().Any();
         }
     }
 }

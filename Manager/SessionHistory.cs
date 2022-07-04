@@ -65,6 +65,11 @@ namespace StereoKitApp
             _levelHistories.Clear();
             _touches.Clear();
             _looks.Clear();
+            _holds.Clear();
+
+            _touchingInProgress = false;
+            _lookingInProgress  = false;
+            _holdingInProgress  = false;
         }
 
         public List<LevelHistory> GetLevelHistories()
@@ -124,8 +129,38 @@ namespace StereoKitApp
 
         public List<TimePeriod> GetHoldPeriods()
         {
-            // create copy of list
+            // Create copy of list
             return _holds.ToList();
+        }
+
+        public List<TimePeriod> GetCurrentLevelTouchTimePeriods()
+        {
+            LevelHistory current = GetCurrentLevelHistory();
+            
+            // Filter for the TimePeriods that started during the current level OR carried over from the previous level
+            return _touches
+                .Where(t => t.Begin > current.Begin || (t.Begin < current.Begin && (t.End ?? DateTime.Now) > current.Begin))
+                .ToList();
+        }
+
+        public List<TimePeriod> GetCurrentLevelLookTimePeriods()
+        {
+            LevelHistory current = GetCurrentLevelHistory();
+
+            // Filter for the TimePeriods that started during the current level OR carried over from the previous level
+            return _looks
+                .Where(l => l.Begin > current.Begin || (l.Begin < current.Begin && (l.End ?? DateTime.Now) > current.Begin))
+                .ToList();
+        }
+
+        public List<TimePeriod> GetCurrentLevelHoldTimePeriods()
+        {
+            LevelHistory current = GetCurrentLevelHistory();
+
+            // Filter for the TimePeriods that started during the current level OR carried over from the previous level
+            return _holds
+                .Where(h => h.Begin > current.Begin || (h.Begin < current.Begin && (h.End ?? DateTime.Now) > current.Begin))
+                .ToList();
         }
 
         public void BeginTouchPeriod()
