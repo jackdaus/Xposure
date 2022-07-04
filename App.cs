@@ -11,8 +11,6 @@ namespace StereoKitApp
 			displayPreference = DisplayMode.MixedReality
 		};
 		public static PassthroughFBExt Passthrough;
-		public static TextStyle GreenTextStyle;
-
 
 		Matrix floorTransform;
 		Material floorMaterial;
@@ -38,11 +36,6 @@ namespace StereoKitApp
 			Input.HandSolid(Handed.Max, false);
 
 			lvlManager = new LevelManager();
-
-			GreenTextStyle = Text.MakeStyle(
-				Default.Font,
-				1 * U.cm,
-				Util.Colors.Green);
 		}
 
 		public void Step()

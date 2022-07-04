@@ -33,15 +33,12 @@ namespace StereoKitApp
             {
                 UI.WindowBegin("Report", ref _pose, windowType: UIWin.Body);
                 UI.Label("Report");
-                UI.HSeparator();
 
-                UI.PushTint(Red);
-                if (UI.ButtonRoundAt("Exit Report", Asset.Instance.IconClose, new Vec3(-0.035f, -0.01f, 0), 0.02f))
-                {
+                UI.SameLine();
+                if (UI.Button("Done"))
                     _windowVisible = false;
-                    history.ResetHistory();
-                }
-                UI.PopTint();
+
+                UI.HSeparator();
 
                 history.GetSessionSpans().ForEach(s =>
                 {

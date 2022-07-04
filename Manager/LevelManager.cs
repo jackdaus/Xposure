@@ -86,13 +86,22 @@ namespace StereoKitApp
                 UI.Label("Objectives:");
                 _scene.GetObjectives().ForEach(o =>
                 {
-                    //UI.PushTextStyle(App.GreenTextStyle);
-                    //UI.Label(o.IsCompleted(_history) ? "" : "");
-                    //UI.PopTextStyle();
-                    //UI.SameLine();
                     UI.Label((o.IsCompleted(_history) ? Util.SpecialChars.CheckboxCompositeReversed : Util.SpecialChars.Checkbox) 
                         + $"\t{ o.Description}");
                 });
+
+                // View Report
+                if (_currentSceneLevel == _scene.GetMaxLevel() && _scene.GetObjectives().TrueForAll(s => s.IsCompleted(_history)))
+                {
+                    UI.Label("");
+                    UI.Label("Completed!");
+                    if (!_report.IsVisible())
+                    {
+                        UI.SameLine();
+                        if (UI.Button("View Report"))
+                            _report.MakeVisible(_windowPose);
+                    }
+                }
 
                 UI.HSeparator();
                 if (UI.Button("Exit")) 
@@ -112,6 +121,9 @@ namespace StereoKitApp
                 throw new InvalidOperationException("Scene already in progress! Cannot begin a new scene.");
 
             _selectedPhobiaType = type;
+
+            // Reset existing history to reset report
+            _history.ResetHistory();
 
             switch (type)
             {
