@@ -215,13 +215,28 @@ namespace StereoKitApp
         /// <returns></returns>
         public bool PatientIsTouching()
         {
-            Hand handR = Input.Hand(Handed.Right);
-            Hand handL = Input.Hand(Handed.Left);
-            Pose fingerTipR = handR[FingerId.Index, JointId.Tip].Pose;
-            Pose fingerTipL = handL[FingerId.Index, JointId.Tip].Pose;
-            var bounds = new Bounds(_solid.GetPose().position, _activeModel.Bounds.dimensions * Scale);
+            Bounds modelBounds = new Bounds(_solid.GetPose().position, _activeModel.Bounds.dimensions * Scale);
 
-            return (bounds.Contains(fingerTipR.position) || bounds.Contains(fingerTipL.position));
+            // Loop over both hands
+            for (int h = 0; h < (int)Handed.Max; h++)
+            {
+                Hand hand = Input.Hand((Handed)h);
+                
+                // Only consider tracked hands.
+                // Untracked hands can still have a position, even if not visible!
+                if (hand.IsTracked)
+                {
+                    // Loop over all 5 fingers
+                    for (int f = 0; f <= (int)FingerId.Little; f++)
+                    {
+                        Pose fingertip = hand[(FingerId)f, JointId.Tip].Pose;
+                        if (modelBounds.Contains(fingertip.position))
+                            return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         public bool PatientIsLooking()
