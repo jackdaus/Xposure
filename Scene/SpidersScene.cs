@@ -62,7 +62,10 @@ namespace StereoKitApp
 
                     // Objectives
                     _objectives.Clear();
-                    _objectives.Add(new WaitObjective(5));
+                    _objectives.Add(new WaitObjective(2));
+                    _objectives.Add(new DistanceObjective(0.5f));
+                    _objectives.Add(new TouchObjective(1));
+                    _objectives.Add(new PickUpObjective());
 
                     break;
                 case 2:
@@ -117,11 +120,11 @@ namespace StereoKitApp
             return 4; 
         }
 
-        public bool HandIsTouchingAnyPhobicStimulus()
+        public bool PatientIsTouchingAnyPhobicStimulus()
         {
             foreach (var sp in _spiders)
             {
-                if (sp.HandIsTouching())
+                if (sp.PatientIsTouching())
                     return true;
             }
 
@@ -133,6 +136,17 @@ namespace StereoKitApp
             foreach (var sp in _spiders)
             {
                 if (sp.PatientIsLooking())
+                    return true;
+            }
+
+            return false;
+        }
+
+        public bool PatientIsHoldingAnyPhobicStimulus()
+        {
+            foreach (var sp in _spiders)
+            {
+                if (sp.PatientIsHolding())
                     return true;
             }
 

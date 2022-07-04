@@ -16,8 +16,9 @@ namespace StereoKitApp
 
 
         // TODO maybe turn this into a base class and have these methods be inheritted? 
-        bool HandIsTouchingAnyPhobicStimulus();
+        bool PatientIsTouchingAnyPhobicStimulus();
         bool PatientIsLookingAtAnyPhobicStimulus();
+        bool PatientIsHoldingAnyPhobicStimulus();
         List<IObjective> GetObjectives();
         bool AllObjectivesComplete();
         float GetMinDistance();

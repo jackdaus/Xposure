@@ -13,8 +13,9 @@ namespace StereoKitApp
         private Pose _windowPose = new Pose(-0.3f, 0, -0.3f, Quat.LookDir(1, 0, 1));
         private SessionHistory _history = new SessionHistory();
         private Report _report = new Report();
-        private bool _wasJustTouching = false;
-        private bool _wasJustLooking = false;
+        private bool _wasJustTouching   = false;
+        private bool _wasJustLooking    = false;
+        private bool _wasJustHolding    = false;
 
         public LevelManager()
         { 
@@ -28,6 +29,7 @@ namespace StereoKitApp
                 recordTouches();
                 recordLooks();
                 recordMinDistance();
+                recordHolds();
             }
 
             _report.Step(_history);
@@ -167,7 +169,7 @@ namespace StereoKitApp
         private void recordTouches()
         {
             // TODO add a debounce
-            if (_scene.HandIsTouchingAnyPhobicStimulus())
+            if (_scene.PatientIsTouchingAnyPhobicStimulus())
             {
                 if (!_wasJustTouching)
                 {
@@ -195,8 +197,7 @@ namespace StereoKitApp
             {
                 if (!_wasJustLooking)
                 {
-                    // Just touched!
-                    //Log.Info($"Just Touched! {DateTime.Now.Ticks}");
+                    // Just looked!
                     _history.BeginLookPeriod();
 
                     _wasJustLooking = true;
@@ -204,11 +205,32 @@ namespace StereoKitApp
             }
             else if (_wasJustLooking)
             {
-                // Just untouched!
-                //Log.Info($"Just Untouched! {DateTime.Now.Ticks}");
+                // Just looked!
                 _history.EndLookPeriod();
 
                 _wasJustLooking = false;
+            }
+        }
+
+        private void recordHolds()
+        {
+            // TODO add a debounce
+            if (_scene.PatientIsHoldingAnyPhobicStimulus())
+            {
+                if (!_wasJustHolding)
+                {
+                    // Just Held!
+                    _history.BeginHoldPeriod();
+
+                    _wasJustHolding = true;
+                }
+            }
+            else if (_wasJustHolding)
+            {
+                // Just Unheld!
+                _history.EndHoldPeriod();
+
+                _wasJustHolding = false;
             }
         }
 

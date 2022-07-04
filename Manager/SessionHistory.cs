@@ -10,9 +10,11 @@ namespace StereoKitApp
         private List<LevelHistory> _levelHistories = new List<LevelHistory>();
         private List<TimePeriod> _touches = new List<TimePeriod>();
         private List<TimePeriod> _looks = new List<TimePeriod>();
+        private List<TimePeriod> _holds = new List<TimePeriod>();
         private bool _levelInProgress;
         private bool _touchingInProgress;
         private bool _lookingInProgress;
+        private bool _holdingInProgress;
 
         public void BeginLevel(int level)
         {
@@ -108,6 +110,24 @@ namespace StereoKitApp
             return _levelHistories.Count() > 0;
         }
 
+        public List<TimePeriod> GetTouchTimePeriods()
+        {
+            // create copy of list
+            return _touches.ToList();
+        }
+
+        public List<TimePeriod> GetLookTimePeriods()
+        {
+            // create copy of list
+            return _looks.ToList();
+        }
+
+        public List<TimePeriod> GetHoldPeriods()
+        {
+            // create copy of list
+            return _holds.ToList();
+        }
+
         public void BeginTouchPeriod()
         {
             if (_touchingInProgress)
@@ -131,12 +151,6 @@ namespace StereoKitApp
             _touches.Add(period);
 
             _touchingInProgress = false;
-        }
-
-        public List<TimePeriod> GetTouchTimePeriods()
-        {
-            // create copy of list
-            return _touches.ToList();
         }
 
         public void BeginLookPeriod()
@@ -164,10 +178,29 @@ namespace StereoKitApp
             _lookingInProgress = false;
         }
 
-        public List<TimePeriod> GetLookTimePeriods()
+        public void BeginHoldPeriod()
         {
-            // create copy of list
-            return _looks.ToList();
+            if (_holdingInProgress)
+                throw new ApplicationException("Hold already in progress!");
+
+            TimePeriod period = new TimePeriod();
+            period.Begin = DateTime.Now;
+            _holds.Add(period);
+
+            _holdingInProgress = true;
+        }
+
+        public void EndHoldPeriod()
+        {
+            if (!_holdingInProgress)
+                throw new ApplicationException("No hold in progress!");
+
+            var period = _holds.Last();
+            period.End = DateTime.Now;
+            _holds.RemoveAt(_holds.Count - 1);
+            _holds.Add(period);
+
+            _holdingInProgress = false;
         }
     }
 }

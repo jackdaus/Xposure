@@ -14,6 +14,7 @@ namespace StereoKitApp
         private int _modelIntensity = 0;
         private Model _activeModel;
         private int _maxModelLevel { get => models.Count - 1; }
+        private bool _isHeld;
 
         // walking
         private bool _roamingOn = true;
@@ -116,10 +117,12 @@ namespace StereoKitApp
             {
                 // We must disable physics when UI handle is in use
                 _solid.Enabled = false;
+                _isHeld = true;
             }
             else
             {
                 _solid.Enabled = true;
+                _isHeld = false;
             }
 
             // We need the teleport here... not sure why... but it makes it work!
@@ -134,8 +137,6 @@ namespace StereoKitApp
                 syncAnimation();
                 _lastWalkingChange = DateTime.Now;
             }
-
-            // touching stuff
 
             if (DebugTools.DEBUG_TOOLS_ON)
             {
@@ -212,7 +213,7 @@ namespace StereoKitApp
         /// Is the hand touching the phobic stimulus this frame?
         /// </summary>
         /// <returns></returns>
-        public bool HandIsTouching()
+        public bool PatientIsTouching()
         {
             Hand handR = Input.Hand(Handed.Right);
             Hand handL = Input.Hand(Handed.Left);
@@ -231,6 +232,11 @@ namespace StereoKitApp
 
             Vec3 at = new Vec3();
             return patientSightRay.Intersect(bounds, out at);
+        }
+
+        public bool PatientIsHolding()
+        {
+            return _isHeld;
         }
 
         // TODO make this compatible with other PhobicStimulus sub-classes

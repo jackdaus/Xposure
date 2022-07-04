@@ -115,11 +115,11 @@ namespace StereoKitApp
             return 4; 
         }
 
-        public bool HandIsTouchingAnyPhobicStimulus()
+        public bool PatientIsTouchingAnyPhobicStimulus()
         {
             foreach (var b in _bees)
             {
-                if (b.HandIsTouching())
+                if (b.PatientIsTouching())
                     return true;
             }
 
@@ -131,6 +131,17 @@ namespace StereoKitApp
             foreach (var b in _bees)
             {
                 if (b.PatientIsLooking())
+                    return true;
+            }
+
+            return false;
+        }
+
+        public bool PatientIsHoldingAnyPhobicStimulus()
+        {
+            foreach (var b in _bees)
+            {
+                if (b.PatientIsHolding())
                     return true;
             }
 
