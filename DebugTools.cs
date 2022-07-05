@@ -19,7 +19,6 @@ namespace StereoKitApp
 		private static string logText = "";
 
 		private static Spider debugSpider1 = new Spider();
-		private static Spider debugSpider2 = new Spider();
 
 		private static Bee debugBee1 = new Bee();
 
@@ -30,22 +29,20 @@ namespace StereoKitApp
 			if (DEBUG_SPIDERS_ON)
             {
 				debugSpider1.Init();
+				debugSpider1.PhysicsEnabled = true;
+				debugSpider1.RoamingEnabled = false;
 				debugSpider1.SetPosition(0f, 0, -0.5f);
 				debugSpider1.ModelIntensity = 9;
-				debugSpider1.RoamingOn = true;
-
-				debugSpider2.Init();
-				debugSpider1.SetPosition(0f, 0, -1f);
-				debugSpider1.ModelIntensity = 9;
-				debugSpider1.RoamingOn = true;
 			}
 
 			if (DEBUG_BEES_ON)
             {
+				Vec3 position = new Vec3(0, 0, -1f);
 				debugBee1.Init();
-				debugBee1.SetPosition(0f, 0, -0.5f);
+				debugBee1.RoamingEnabled = false;
+				debugBee1.SetPosition(position);
 				debugBee1.ModelIntensity = 4;
-				debugBee1.RoamingOn = false;
+				debugBee1.SoundEnabled = true;
 			}
 		}
 
@@ -64,7 +61,6 @@ namespace StereoKitApp
 			if (DEBUG_SPIDERS_ON)
             {
 				debugSpider1.Step();
-                debugSpider2.Step();
             }
 
 			if (DEBUG_BEES_ON)

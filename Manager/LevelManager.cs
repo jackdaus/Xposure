@@ -153,8 +153,13 @@ namespace StereoKitApp
         {
             _history.EndLevel();
 
+            _wasJustHolding = false;
+            _wasJustLooking = false;
+            _wasJustTouching = false;
+            
             _currentSceneLevel = 1;
             _selectedPhobiaType = null;
+            _scene.Destroy();
         }
 
         private void changeLevel(int level)

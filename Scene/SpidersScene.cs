@@ -28,12 +28,10 @@ namespace StereoKitApp
             Spider spider = new Spider();
             spider.Init();
 
-            // Put spider "in front" if debugging for easier viewing
-            var position = DebugTools.DEBUG_TOOLS_ON
-                ? new Vec3(0, 0, -0.6f)
-                : new Vec3(0.25f, Util.FloorHeight + 0.05f, 0);
+            Vec3 position = new Vec3(0.25f, Util.FloorHeight + 0.05f, 0);
 
             spider.SetPosition(position);
+            spider.PhysicsEnabled = true;
             _spiders.Add(spider);
 
             // Begin at level 1
@@ -57,13 +55,13 @@ namespace StereoKitApp
                     _spiders.ForEach(sp =>
                     {
                         sp.ModelIntensity = 1;
-                        sp.RoamingOn = false;
+                        sp.RoamingEnabled = false;
                     });
 
                     // Objectives
                     _objectives.Clear();
                     _objectives.Add(new WaitObjective(2));
-                    _objectives.Add(new DistanceObjective(0.5f));
+                    //_objectives.Add(new DistanceObjective(0.5f));
                     _objectives.Add(new TouchObjective(1));
                     _objectives.Add(new PickUpObjective());
 
@@ -72,42 +70,45 @@ namespace StereoKitApp
                     // Level 2: One roaming M1 spider
                     _spiders.ForEach(sp =>
                     {
-                        sp.ModelIntensity = 1;
-                        sp.RoamingOn = true;
-                    });
-
-                    // Objectives
-                    _objectives.Clear();
-                    _objectives.Add(new WaitObjective(8));
-                    _objectives.Add(new TouchObjective(1));
-
-                    break;
-
-                case 3:
-                    // Level 3: One roaming M5 spider
-                    _spiders.ForEach(sp =>
-                    {
-                        sp.ModelIntensity = 5;
-                        sp.RoamingOn = true;
-                    });
-
-                    // Objectives
-                    _objectives.Clear();
-                    _objectives.Add(new WaitObjective(5));
-
-                    break;
-                case 4:
-                    // Level 4: One roaming M9 spider
-                    _spiders.ForEach(sp =>
-                    {
                         sp.ModelIntensity = 9;
-                        sp.RoamingOn = true;
+                        sp.RoamingEnabled = true;
                     });
 
                     // Objectives
                     _objectives.Clear();
-                    _objectives.Add(new WaitObjective(7));
-                    _objectives.Add(new TouchObjective(2));
+                    _objectives.Add(new WaitObjective(1));
+                    _objectives.Add(new TouchObjective(1));
+                    _objectives.Add(new PickUpObjective());
+
+                    //_objectives.Add(new TouchObjective(1));
+
+                    break;
+
+                //case 3:
+                //    // Level 3: One roaming M5 spider
+                //    _spiders.ForEach(sp =>
+                //    {
+                //        sp.ModelIntensity = 5;
+                //        sp.RoamingOn = true;
+                //    });
+
+                //    // Objectives
+                //    _objectives.Clear();
+                //    _objectives.Add(new WaitObjective(5));
+
+                //    break;
+                //case 4:
+                //    // Level 4: One roaming M9 spider
+                //    _spiders.ForEach(sp =>
+                //    {
+                //        sp.ModelIntensity = 9;
+                //        sp.RoamingOn = true;
+                //    });
+
+                //    // Objectives
+                //    _objectives.Clear();
+                //    _objectives.Add(new WaitObjective(7));
+                //    _objectives.Add(new TouchObjective(2));
 
                     break;
                 default:
@@ -117,7 +118,12 @@ namespace StereoKitApp
 
         public int GetMaxLevel()
         {
-            return 4; 
+            return 2; 
+        }
+
+        public void Destroy()
+        {
+            // Nothing to do here :)
         }
 
         public bool PatientIsTouchingAnyPhobicStimulus()

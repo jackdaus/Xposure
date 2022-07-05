@@ -14,6 +14,11 @@ namespace StereoKitApp
 
         int GetMaxLevel();
 
+        /// <summary>
+        /// Should be called to properly clean up a scene
+        /// </summary>
+        void Destroy();
+
 
         // TODO maybe turn this into a base class and have these methods be inheritted? 
         bool PatientIsTouchingAnyPhobicStimulus();

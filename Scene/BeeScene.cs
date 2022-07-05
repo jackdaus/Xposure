@@ -27,10 +27,10 @@ namespace StereoKitApp
             Bee bee = new Bee();
             bee.Init();
 
-            // Put bee "in front" if debugging for easier viewing
-            var position = DebugTools.DEBUG_TOOLS_ON
-                ? new Vec3(0, 0, -0.6f)
-                : new Vec3(0.25f, Util.FloorHeight + 0.05f, 0);
+            // Disable the physics so the bee flies!
+            bee.PhysicsEnabled = false;
+
+            Vec3 position =  new Vec3(0.25f, Util.FloorHeight + 1.5f, -0.6f);
 
             bee.SetPosition(position);
             _bees.Add(bee);
@@ -52,10 +52,10 @@ namespace StereoKitApp
             {
                 case 1:
                     // Level 1: One stationary M1 bee
-                    _bees.ForEach(sp =>
+                    _bees.ForEach(b =>
                     {
-                        sp.ModelIntensity = 1;
-                        sp.RoamingOn = false;
+                        b.ModelIntensity = 1;
+                        b.RoamingEnabled = false;
                     });
 
                     // Objectives
@@ -65,10 +65,11 @@ namespace StereoKitApp
                     break;
                 case 2:
                     // Level 2: One roaming M1 bee
-                    _bees.ForEach(sp =>
+                    _bees.ForEach(b =>
                     {
-                        sp.ModelIntensity = 1;
-                        sp.RoamingOn = true;
+                        b.ModelIntensity = 4;
+                        b.RoamingEnabled = true;
+                        b.SoundEnabled = true;
                     });
 
                     // Objectives
@@ -80,10 +81,11 @@ namespace StereoKitApp
 
                 case 3:
                     // Level 3: One roaming M5 bee
-                    _bees.ForEach(sp =>
+                    _bees.ForEach(b =>
                     {
-                        sp.ModelIntensity = 2;
-                        sp.RoamingOn = true;
+                        b.ModelIntensity = 2;
+                        b.RoamingEnabled = true;
+                        b.SoundEnabled = false;
                     });
 
                     // Objectives
@@ -93,10 +95,10 @@ namespace StereoKitApp
                     break;
                 case 4:
                     // Level 4: One roaming M4 bee
-                    _bees.ForEach(sp =>
+                    _bees.ForEach(b =>
                     {
-                        sp.ModelIntensity = 4;
-                        sp.RoamingOn = true;
+                        b.ModelIntensity = 4;
+                        b.RoamingEnabled = true;
                     });
 
                     // Objectives
@@ -113,6 +115,16 @@ namespace StereoKitApp
         public int GetMaxLevel()
         {
             return 4; 
+        }
+
+        public void Destroy()
+        {
+            // Turn off sounds in case any are on!
+            _bees.ForEach(b =>
+            {
+                b.SoundEnabled = false;
+                b.Destroy();
+            });
         }
 
         public bool PatientIsTouchingAnyPhobicStimulus()

@@ -26,9 +26,14 @@ namespace StereoKitApp
         private Guid _id = Guid.NewGuid();
 
         /// <summary>
-        /// Setting to turn on/off the model roaming behavior. If roaming, model will move around.
+        /// Enable or disable the model's roaming behavior. If roaming, model will move around.
         /// </summary>
-        public bool RoamingOn { get => _roamingOn; set => _roamingOn = value; }
+        public bool RoamingEnabled { get => _roamingOn; set => _roamingOn = value; }
+
+        /// <summary>
+        /// Enable or disable the model's physics simulation.
+        /// </summary>
+        public bool PhysicsEnabled { get; set; }
 
         public float Scale { get; set; } = 3;
         public float SightScale { get; set; } = 3;
@@ -82,6 +87,11 @@ namespace StereoKitApp
 
             // Use the last model's bounds since it looks the best. TODO each model should have it's own bounding box, ideally
             _solid.AddBox(models.Last().Bounds.dimensions * Scale, 1);
+
+            // Set physics off initially to prevent the physics system stepping before
+            // the client gets a chance to turn off physics!
+            _solid.Enabled = false;
+            PhysicsEnabled = false;
         }
 
         /// <summary>
@@ -90,7 +100,7 @@ namespace StereoKitApp
         public void Step()
         {
             // Roaming movement
-            if (RoamingOn && _isWalking)
+            if (RoamingEnabled && _isWalking)
             {
                 Pose solidPose = _solid.GetPose();
                 Vec3 forwardPose = solidPose.Forward;
@@ -121,7 +131,8 @@ namespace StereoKitApp
             }
             else
             {
-                _solid.Enabled = true;
+                // Renable the physics (only if the PhobicStimulus has physics enabled!)
+                _solid.Enabled = PhysicsEnabled;
                 _isHeld = false;
             }
 

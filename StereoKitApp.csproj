@@ -27,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Assets\bee.glb">
+    <None Update="Assets\models\bee.glb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Assets\icons\outline_arrow_downward_white_24dp.png">
@@ -45,37 +45,43 @@
     <None Update="Assets\icons\outline_visibility_white_24dp.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Assets\spiderA.glb">
+    <None Update="Assets\models\spiderA.glb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Assets\spiderB.glb">
+    <None Update="Assets\models\spiderB.glb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Assets\spiderC.glb">
+    <None Update="Assets\models\spiderC.glb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Assets\spiderD.glb">
+    <None Update="Assets\models\spiderD.glb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Assets\spiderE.glb">
+    <None Update="Assets\models\spiderE.glb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Assets\spiderF.glb">
+    <None Update="Assets\models\spiderF.glb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Assets\spiderG\scene.bin">
+    <None Update="Assets\models\spiderG\scene.bin">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Assets\spiderG\scene.gltf">
+    <None Update="Assets\models\spiderG\scene.gltf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Assets\spiderG\textures\Spider_baseColor.jpeg">
+    <None Update="Assets\models\spiderG\textures\Spider_baseColor.jpeg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Assets\spiderG\textures\Spider_Eye_normal.png">
+    <None Update="Assets\models\spiderG\textures\Spider_Eye_normal.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Assets\spiderG\textures\Spider_Fur_baseColor.png">
+    <None Update="Assets\models\spiderG\textures\Spider_Fur_baseColor.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\sounds\bee.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\sounds\bee_alt.mp3">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

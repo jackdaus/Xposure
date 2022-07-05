@@ -28,23 +28,27 @@ namespace StereoKitApp
         public Sprite IconPower { get; }
         public Sprite IconUp { get; }
 
+        public Sound BeeBuzz { get; }
+
         Asset()
         {
-            SpiderModelA = Model.FromFile("spiderA.glb");
-            SpiderModelB = Model.FromFile("spiderB.glb");
-            SpiderModelC = Model.FromFile("spiderC.glb");
-            SpiderModelD = Model.FromFile("spiderD.glb");
-            SpiderModelE = Model.FromFile("spiderE.glb");
-            SpiderModelF = Model.FromFile("spiderF.glb");
-            SpiderModelG = Model.FromFile("spiderG/scene.gltf");
+            SpiderModelA = Model.FromFile("models/spiderA.glb");
+            SpiderModelB = Model.FromFile("models/spiderB.glb");
+            SpiderModelC = Model.FromFile("models/spiderC.glb");
+            SpiderModelD = Model.FromFile("models/spiderD.glb");
+            SpiderModelE = Model.FromFile("models/spiderE.glb");
+            SpiderModelF = Model.FromFile("models/spiderF.glb");
+            SpiderModelG = Model.FromFile("models/spiderG/scene.gltf");
 
-            Bee = Model.FromFile("bee.glb");
+            Bee = Model.FromFile("models/bee.glb");
 
             IconClose   = Sprite.FromFile("icons/outline_close_white_24dp.png");
             IconDown    = Sprite.FromFile("icons/outline_arrow_downward_white_24dp.png");
             IconEye     = Sprite.FromFile("icons/outline_visibility_white_24dp.png");
             IconPower   = Sprite.FromFile("icons/outline_power_settings_new_white_24dp.png");
             IconUp      = Sprite.FromFile("icons/outline_arrow_upward_white_24dp.png");
+
+            BeeBuzz    = Sound.FromFile("sounds/bee.mp3");
         }
 
         public static Asset Instance
