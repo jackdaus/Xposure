@@ -6,6 +6,13 @@ namespace StereoKitApp
 {
     public struct LevelHistory 
     {
+        public LevelHistory(DateTime begin, DateTime? end, int level) : this()
+        {
+            Begin = begin;
+            End = end;
+            Level = level;
+        }
+
         public DateTime Begin { get; set; }
         public DateTime? End { get; set; }
         public int Level { get; set; }

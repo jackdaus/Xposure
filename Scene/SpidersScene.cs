@@ -1,4 +1,5 @@
 using StereoKit;
+using StereoKitApp.Objective;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -77,8 +78,7 @@ namespace StereoKitApp
                     // Objectives
                     _objectives.Clear();
                     _objectives.Add(new WaitObjective(1));
-                    _objectives.Add(new TouchObjective(1));
-                    _objectives.Add(new PickUpObjective());
+                    _objectives.Add(new LookObjective(10));
 
                     //_objectives.Add(new TouchObjective(1));
 
