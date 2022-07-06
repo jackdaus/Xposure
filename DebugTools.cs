@@ -1,4 +1,4 @@
-﻿using StereoKit;
+using StereoKit;
 using System.Collections.Generic;
 
 namespace StereoKitApp
@@ -39,7 +39,7 @@ namespace StereoKitApp
             {
 				Vec3 position = new Vec3(0, 0, -1f);
 				debugBee1.Init();
-				debugBee1.RoamingEnabled = false;
+				debugBee1.RoamingEnabled = true;
 				debugBee1.SetPosition(position);
 				debugBee1.ModelIntensity = 4;
 				debugBee1.SoundEnabled = true;

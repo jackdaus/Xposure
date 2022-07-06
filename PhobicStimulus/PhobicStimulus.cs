@@ -1,4 +1,4 @@
-﻿using StereoKit;
+using StereoKit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -172,21 +172,6 @@ namespace StereoKitApp
                 UI.Label($"Scale: {scaleVal}");
                 UI.HSlider($"Scale_{_id}", ref scaleVal, 0, 10, 0.01f);
                 Scale = scaleVal;
-                UI.Label($"Model Position: {_solid.GetPose().position}");
-                UI.Label($"Head Position: {Input.Head.position}");
-                UI.Label($"Head Forward: {Input.Head.Forward}");
-
-                Vec3 v4 = _solid.GetPose().position - Input.Head.position;
-                UI.Label($"v4: {v4}");
-
-                float cosTheta = Vec3.Dot(v4.Normalized, Input.Head.Forward.Normalized);
-                UI.Label($"costTheta: {cosTheta}");
-
-
-                var distance = Vec3.Distance(Input.Head.position, _solid.GetPose().position);
-                UI.Label($"Distance to user: {distance}");
-                UI.Label($"Looking: {PatientIsLooking()}");
-
 
                 UI.WindowEnd();
             }
@@ -271,16 +256,28 @@ namespace StereoKitApp
             return _isHeld;
         }
 
-        // TODO make this compatible with other PhobicStimulus sub-classes
         private void syncAnimation()
         {
             // last spider level has animations
             if (_modelIntensity == _maxModelLevel)
             {
-                if (_isWalking)
-                    _activeModel.PlayAnim("walk_ani_vor", AnimMode.Loop);
-                else
-                    _activeModel.PlayAnim("warte_pose", AnimMode.Loop);
+                // TODO this probably isn't a good use of reflection! 
+                // It would be better to encapsulate the animation within each sub-class
+                Type thisType = GetType();
+                if (thisType == typeof(Spider))
+                {
+                    if (_isWalking)
+                        _activeModel.PlayAnim("walk_ani_vor", AnimMode.Loop);
+                    else
+                        _activeModel.PlayAnim("warte_pose", AnimMode.Loop);
+                }
+                else if(thisType == typeof(Bee))
+                {
+                    if (_isWalking)
+                        _activeModel.PlayAnim("_bee_hover", AnimMode.Loop);
+                    else
+                        _activeModel.PlayAnim("_bee_idle", AnimMode.Loop);
+                }
             }
         }
 

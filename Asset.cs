@@ -40,7 +40,8 @@ namespace StereoKitApp
             SpiderModelF = Model.FromFile("models/spiderF.glb");
             SpiderModelG = Model.FromFile("models/spiderG/scene.gltf");
 
-            Bee = Model.FromFile("models/bee.glb");
+            //Bee = Model.FromFile("models/bee.glb");
+            Bee = Model.FromFile("models/bee_alt2.glb");
 
             IconClose   = Sprite.FromFile("icons/outline_close_white_24dp.png");
             IconDown    = Sprite.FromFile("icons/outline_arrow_downward_white_24dp.png");

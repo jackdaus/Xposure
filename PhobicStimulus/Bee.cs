@@ -37,15 +37,14 @@ namespace StereoKitApp
             models.Add(beeModel);
 
             // Initialize level 4
-            beeModel = Asset.Instance.Bee.Copy();
-            beeModel.RootNode.ModelTransform *= Matrix.S(0.05f);
-            models.Add(beeModel);
+            //beeModel = Asset.Instance.Bee.Copy();
+            //beeModel.RootNode.ModelTransform *= Matrix.S(0.05f);
+            //models.Add(beeModel);
 
             // Initialize level 4 animated! but texture doesn't load :(
-            //beeModel = Asset.Instance.Bee.Copy();
-            //beeModel.RootNode.ModelTransform *= Matrix.S(0.001f); S
-            //beeModel.PlayAnim("_bee_hover", AnimMode.Loop);
-            //models.Add(beeModel);
+            beeModel = Asset.Instance.Bee.Copy();
+            beeModel.RootNode.ModelTransform *= Matrix.S(0.001f);
+            models.Add(beeModel);
 
             // Sound
             // TODO I don't think this works with multiple instances of bees... the sound gets stomped by the other instances
