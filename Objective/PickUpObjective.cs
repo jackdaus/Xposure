@@ -7,10 +7,9 @@ namespace StereoKitApp
 {
     internal struct PickUpObjective : IObjective
     {
-        public string Description { get => $"Pick up the object"; }
-
-        public PickUpObjective()
+        public string Description(SessionHistory history)
         {
+            return "Pick up the object";
         }
 
         public bool IsCompleted(SessionHistory history)

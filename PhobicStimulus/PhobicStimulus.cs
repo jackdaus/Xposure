@@ -36,7 +36,6 @@ namespace StereoKitApp
         public bool PhysicsEnabled { get; set; }
 
         public float Scale { get; set; } = 3;
-        public float SightScale { get; set; } = 3;
 
         /// <summary>
         /// Level of realism of the model
@@ -154,7 +153,6 @@ namespace StereoKitApp
                 // Draw a UI box to visualize the solid
                 Mesh box = Mesh.GenerateCube(_activeModel.Bounds.dimensions);
                 box.Draw(Material.UIBox, sPose.ToMatrix(Scale));
-                box.Draw(Material.UIBox, sPose.ToMatrix(Scale*SightScale));
 
                 // Window for debug controls
                 UI.WindowBegin($"PSTIM_DEBUG_{_id}", ref _debugWindowPose);
@@ -174,13 +172,21 @@ namespace StereoKitApp
                 UI.Label($"Scale: {scaleVal}");
                 UI.HSlider($"Scale_{_id}", ref scaleVal, 0, 10, 0.01f);
                 Scale = scaleVal;
+                UI.Label($"Model Position: {_solid.GetPose().position}");
+                UI.Label($"Head Position: {Input.Head.position}");
+                UI.Label($"Head Forward: {Input.Head.Forward}");
 
-                UI.Label($"x: {_solid.GetPose().position.x}");
-                UI.Label($"y: {_solid.GetPose().position.y}");
-                UI.Label($"z: {_solid.GetPose().position.z}");
+                Vec3 v4 = _solid.GetPose().position - Input.Head.position;
+                UI.Label($"v4: {v4}");
+
+                float cosTheta = Vec3.Dot(v4.Normalized, Input.Head.Forward.Normalized);
+                UI.Label($"costTheta: {cosTheta}");
+
 
                 var distance = Vec3.Distance(Input.Head.position, _solid.GetPose().position);
                 UI.Label($"Distance to user: {distance}");
+                UI.Label($"Looking: {PatientIsLooking()}");
+
 
                 UI.WindowEnd();
             }
@@ -252,12 +258,12 @@ namespace StereoKitApp
 
         public bool PatientIsLooking()
         {
-            Pose patientHead = Input.Head;
-            Ray patientSightRay = patientHead.Ray;
-            var bounds = new Bounds(_solid.GetPose().position, _activeModel.Bounds.dimensions * (Scale * SightScale));
-
-            Vec3 at = new Vec3();
-            return patientSightRay.Intersect(bounds, out at);
+            // Get the 'angle' between the stimulus and patient's forward direction.
+            // If patient is generally facing the stimulus, then return true.
+            // TODO would be nice to have eye tracking if supported by the device!
+            Vec3 patientToStimulusVec = _solid.GetPose().position - Input.Head.position;
+            float cosTheta = Vec3.Dot(patientToStimulusVec.Normalized, Input.Head.Forward.Normalized);
+            return cosTheta > 0.55f;
         }
 
         public bool PatientIsHolding()

@@ -21,11 +21,7 @@ namespace StereoKitApp
             if (_levelInProgress)
                 throw new ApplicationException("Level already in progress!");
 
-            var levelHistory = new LevelHistory
-            {
-                Begin = DateTime.Now,
-                Level = level
-            };
+            var levelHistory = new LevelHistory(DateTime.Now, level);
 
             _levelHistories.Add(levelHistory);
             

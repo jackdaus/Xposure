@@ -6,7 +6,18 @@ namespace StereoKitApp
 {
     public interface IObjective
     {
-        public string Description { get; }
+        /// <summary>
+        /// A description of the objective.
+        /// </summary>
+        /// <param name="history"></param>
+        /// <returns></returns>
+        public string Description(SessionHistory history);
+
+        /// <summary>
+        /// If the objective is completed.
+        /// </summary>
+        /// <param name="history"></param>
+        /// <returns></returns>
         public bool IsCompleted(SessionHistory history);
     }
 }

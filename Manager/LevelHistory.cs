@@ -6,17 +6,19 @@ namespace StereoKitApp
 {
     public struct LevelHistory 
     {
-        public LevelHistory(DateTime begin, DateTime? end, int level) : this()
+        // TODO not sure why this constructor is needed... but sometimes the C# compiler complains!
+        public LevelHistory(DateTime begin, int level) : this()
         {
             Begin = begin;
-            End = end;
+            End = null;
             Level = level;
+            MinDistance = float.MaxValue;
         }
 
         public DateTime Begin { get; set; }
         public DateTime? End { get; set; }
         public int Level { get; set; }
-        public float MinDistance { get; set; } = float.MaxValue;
+        public float MinDistance { get; set; }
 
         public TimeSpan GetTimeSpan()
         {

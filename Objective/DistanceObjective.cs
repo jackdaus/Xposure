@@ -8,7 +8,6 @@ namespace StereoKitApp
     {
         private float _distance;
 
-        public string Description { get => $"Get within {Distance} {(Distance ==  1 ? "meter" : "meters")} of the object"; }
         public float Distance 
         { 
             get => _distance;
@@ -21,13 +20,17 @@ namespace StereoKitApp
             }
         }
 
-
         public DistanceObjective(float distance)
         {
             if (distance < 0)
                 throw new ArgumentException("distance must be greater than 0!", nameof(distance));
 
             _distance = distance;
+        }
+
+        public string Description(SessionHistory history)
+        {
+            return $"Get within {Distance} {(Distance == 1 ? "meter" : "meters")} of the object";
         }
 
         public bool IsCompleted(SessionHistory history)

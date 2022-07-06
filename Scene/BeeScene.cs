@@ -74,7 +74,7 @@ namespace StereoKitApp
 
                     // Objectives
                     _objectives.Clear();
-                    _objectives.Add(new WaitObjective(8));
+                    _objectives.Add(new DistanceObjective(0.5f));
                     _objectives.Add(new TouchObjective(1));
 
                     break;

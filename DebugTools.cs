@@ -8,7 +8,7 @@ namespace StereoKitApp
 		/// <summary>
 		/// Conveiently toggle the debug tools on/off here!
 		/// </summary>
-		public static bool DEBUG_TOOLS_ON				= false;
+		public static bool DEBUG_TOOLS_ON				= true;
 
 		// These must be readonly since they are tied to the Init event
 		public readonly static bool DEBUG_SPIDERS_ON	= false;
@@ -29,10 +29,10 @@ namespace StereoKitApp
 			if (DEBUG_SPIDERS_ON)
             {
 				debugSpider1.Init();
-				debugSpider1.PhysicsEnabled = true;
+				debugSpider1.PhysicsEnabled = false;
 				debugSpider1.RoamingEnabled = false;
 				debugSpider1.SetPosition(0f, 0, -0.5f);
-				debugSpider1.ModelIntensity = 9;
+				debugSpider1.ModelIntensity = 1;
 			}
 
 			if (DEBUG_BEES_ON)
