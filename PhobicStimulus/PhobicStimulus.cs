@@ -16,26 +16,31 @@ namespace StereoKitApp
         private int _maxModelLevel { get => models.Count - 1; }
         private bool _isHeld;
 
-        // walking
-        private bool _roamingOn = true;
+        // used for RoamingMode.Walk
         private DateTime _lastWalkingChange = DateTime.Now;
         private bool _isWalking = true;
+
+        // used for RoamingMode.Fly
+        private float _flightTheta = 0;
 
         // debug
         private Pose _debugWindowPose = new Pose(0.4f, 0, -0.4f, Quat.LookDir(0, 0, 1));
         private Guid _id = Guid.NewGuid();
 
         /// <summary>
-        /// Enable or disable the model's roaming behavior. If roaming, model will move around.
-        /// </summary>
-        public bool RoamingEnabled { get => _roamingOn; set => _roamingOn = value; }
-
-        /// <summary>
         /// Enable or disable the model's physics simulation.
         /// </summary>
         public bool PhysicsEnabled { get; set; }
 
+        /// <summary>
+        /// Size of the model
+        /// </summary>
         public float Scale { get; set; } = 3;
+
+        /// <summary>
+        /// How the model is moving on its own
+        /// </summary>
+        public RoamingMode Roaming { get; set; }
 
         /// <summary>
         /// Level of realism of the model
@@ -98,27 +103,7 @@ namespace StereoKitApp
         /// </summary>
         public void Step()
         {
-            // Roaming movement
-            if (RoamingEnabled && _isWalking)
-            {
-                Pose solidPose = _solid.GetPose();
-                Vec3 forwardPose = solidPose.Forward;
-
-                float speed = 0.0015f * Scale;
-                Vec3 newPosition = new Vec3();
-                newPosition.x = solidPose.position.x + (forwardPose.x * speed);
-                newPosition.y = solidPose.position.y;
-                newPosition.z = solidPose.position.z + (forwardPose.z * speed);
-
-                // Rotate to walk in a circle
-                Quat rotateAroundY = (Matrix.R(0, 0.5f, 0) * solidPose.ToMatrix()).Rotation;
-
-                // Remove wobble
-                rotateAroundY.z = 0;
-                rotateAroundY.x = 0;
-
-                _solid.Teleport(newPosition, rotateAroundY);
-            }
+            roam();
 
             // Allow user to pick up / move the solid
             Pose sPose = _solid.GetPose();
@@ -139,42 +124,73 @@ namespace StereoKitApp
             _solid.Teleport(sPose.position, sPose.orientation);
             _activeModel.Draw(sPose.ToMatrix(Scale));
 
-            // randomly change walking status about every 1/300 steps, with a throttle of 3 seconds
-            var timeSinceLastChange = DateTime.Now - _lastWalkingChange;
-            if (_random.Next(300) == 1 && timeSinceLastChange.TotalSeconds > 3)
-            {
-                _isWalking = !_isWalking;
-                syncAnimation();
-                _lastWalkingChange = DateTime.Now;
-            }
-
             if (DebugTools.DEBUG_TOOLS_ON)
             {
-                // Draw a UI box to visualize the solid
-                Mesh box = Mesh.GenerateCube(_activeModel.Bounds.dimensions);
-                box.Draw(Material.UIBox, sPose.ToMatrix(Scale));
-
-                // Window for debug controls
-                UI.WindowBegin($"PSTIM_DEBUG_{_id}", ref _debugWindowPose);
-                UI.Label($"Level: {ModelIntensity}");
-                UI.SameLine();
-                if (UI.ButtonRound($"Down_{_id}", Asset.Instance.IconDown) && _modelIntensity > 0)
-                    ModelIntensity--;
-                UI.SameLine();
-                if (UI.ButtonRound($"Up_{_id}", Asset.Instance.IconUp) && _modelIntensity < _maxModelLevel)
-                    ModelIntensity++;
-
-                UI.Toggle($"IsRoaming_{_id}", ref _roamingOn);
-
-                UI.Label($"Type: {GetType()}");
-
-                float scaleVal = Scale;
-                UI.Label($"Scale: {scaleVal}");
-                UI.HSlider($"Scale_{_id}", ref scaleVal, 0, 10, 0.01f);
-                Scale = scaleVal;
-
-                UI.WindowEnd();
+                debugExtras();
             }
+
+        }
+
+        /// <summary>
+        /// Move the object around according to its RoamingMode
+        /// </summary>
+        private void roam()
+        {
+            // Roaming movement
+            if (Roaming == RoamingMode.Walk)
+            {
+                if (_isWalking)
+                {
+                    Pose solidPose = _solid.GetPose();
+                    Vec3 forwardPose = solidPose.Forward;
+
+                    float speed = 0.0015f * Scale;
+                    Vec3 newPosition = new Vec3();
+                    newPosition.x = solidPose.position.x + (forwardPose.x * speed);
+                    newPosition.y = solidPose.position.y;
+                    newPosition.z = solidPose.position.z + (forwardPose.z * speed);
+
+                    // Rotate to walk in a circle
+                    Quat rotateAroundY = (Matrix.R(0, 0.5f, 0) * solidPose.ToMatrix()).Rotation;
+
+                    // Remove wobble
+                    rotateAroundY.z = 0;
+                    rotateAroundY.x = 0;
+
+                    _solid.Teleport(newPosition, rotateAroundY);
+                }
+
+                // Randomly change ambulating status about every 1/300 steps, with a throttle of 3 seconds
+                var timeSinceLastChange = DateTime.Now - _lastWalkingChange;
+                if (_random.Next(300) == 1 && timeSinceLastChange.TotalSeconds > 3)
+                {
+                    _isWalking = !_isWalking;
+                    syncAnimation();
+                    _lastWalkingChange = DateTime.Now;
+                }
+            }
+            else if (Roaming == RoamingMode.Fly)
+            {
+                Pose solidPose = _solid.GetPose();
+                Vec3 forwardPose = solidPose.Forward;
+
+                float speed = 0.003f * Scale;
+                _flightTheta += 0.02f;
+                Vec3 newPosition = new Vec3();
+                newPosition.x = solidPose.position.x + (forwardPose.x * speed);
+                newPosition.y = solidPose.position.y + (float) Math.Cos(_flightTheta) * 0.002f * Scale;
+                newPosition.z = solidPose.position.z + (forwardPose.z * speed);
+
+                // Rotate to walk in a circle
+                Quat rotateAroundY = (Matrix.R(0, 0.7f, 0) * solidPose.ToMatrix()).Rotation;
+
+                // Remove wobble
+                rotateAroundY.z = 0;
+                rotateAroundY.x = 0;
+
+                _solid.Teleport(newPosition, rotateAroundY);
+            }
+
         }
 
         /// <summary>
@@ -279,6 +295,35 @@ namespace StereoKitApp
                         _activeModel.PlayAnim("_bee_idle", AnimMode.Loop);
                 }
             }
+        }
+
+        private void debugExtras()
+        {
+            // Draw a UI box to visualize the solid
+            Pose sPose = _solid.GetPose();
+            Mesh box = Mesh.GenerateCube(_activeModel.Bounds.dimensions);
+            box.Draw(Material.UIBox, sPose.ToMatrix(Scale));
+
+            // Window for debug controls
+            UI.WindowBegin($"PSTIM_DEBUG_{_id}", ref _debugWindowPose);
+            UI.Label($"Level: {ModelIntensity}");
+            UI.SameLine();
+            if (UI.ButtonRound($"Down_{_id}", Asset.Instance.IconDown) && _modelIntensity > 0)
+                ModelIntensity--;
+            UI.SameLine();
+            if (UI.ButtonRound($"Up_{_id}", Asset.Instance.IconUp) && _modelIntensity < _maxModelLevel)
+                ModelIntensity++;
+
+            UI.Label($"Type: {GetType()}");
+            UI.Label($"Roaming: {Roaming}");
+            UI.Label($"Position: {_solid.GetPose().position}");
+
+            float scaleVal = Scale;
+            UI.Label($"Scale: {scaleVal}");
+            UI.HSlider($"Scale_{_id}", ref scaleVal, 0, 10, 0.01f);
+            Scale = scaleVal;
+
+            UI.WindowEnd();
         }
 
     }

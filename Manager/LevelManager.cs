@@ -34,7 +34,7 @@ namespace StereoKitApp
 
             _report.Step(_history);
 
-            UI.WindowBegin("XposuRe Therapy", ref _windowPose);
+            UI.WindowBegin("Xposure Therapy", ref _windowPose);
 
             // Passthrough toggle
             if (App.Passthrough.Available)
@@ -54,9 +54,6 @@ namespace StereoKitApp
                 UI.SameLine();
                 if (UI.Button("Bee"))       
                     initScene(PhobiaType.Bee);
-                UI.SameLine();
-                if (UI.Button("Claustrophobia"))
-                    initScene(PhobiaType.Claustrophobia);
 
                 // Quit button
                 UI.HSeparator();
@@ -135,13 +132,6 @@ namespace StereoKitApp
                     break;
                 case PhobiaType.Bee:
                     _scene = new BeeScene(_history);
-                    break;
-                case PhobiaType.Claustrophobia:
-                    // TODO
-                    throw new NotImplementedException();
-                    break;
-                defaut:
-                    throw new NotImplementedException();
                     break;
             }
 
@@ -251,13 +241,6 @@ namespace StereoKitApp
                     _history.UpdateLevelMinDistance(currentMin);
                 }
             }
-        }
-
-        private enum PhobiaType
-        {
-            Spider,
-            Bee,
-            Claustrophobia,
         }
     }
 }

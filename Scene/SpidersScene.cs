@@ -56,7 +56,7 @@ namespace StereoKitApp
                     _spiders.ForEach(sp =>
                     {
                         sp.ModelIntensity = 1;
-                        sp.RoamingEnabled = false;
+                        sp.Roaming = RoamingMode.None;
                     });
 
                     // Objectives
@@ -72,7 +72,7 @@ namespace StereoKitApp
                     _spiders.ForEach(sp =>
                     {
                         sp.ModelIntensity = 9;
-                        sp.RoamingEnabled = true;
+                        sp.Roaming = RoamingMode.Walk;
                     });
 
                     // Objectives

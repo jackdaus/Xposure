@@ -1,4 +1,4 @@
-using StereoKit;
+﻿using StereoKit;
 using System.Collections.Generic;
 
 namespace StereoKitApp
@@ -12,7 +12,7 @@ namespace StereoKitApp
 
 		// These must be readonly since they are tied to the Init event
 		public readonly static bool DEBUG_SPIDERS_ON	= false;
-		public readonly static bool DEBUG_BEES_ON		= false;
+		public readonly static bool DEBUG_BEES_ON		= true;
 
 		private static Pose logPose = new Pose(1, 0, -0.5f, Quat.LookDir(-1, 0, 1));
 		private static List<string> logList = new List<string>();
@@ -30,19 +30,19 @@ namespace StereoKitApp
             {
 				debugSpider1.Init();
 				debugSpider1.PhysicsEnabled = false;
-				debugSpider1.RoamingEnabled = false;
 				debugSpider1.SetPosition(0f, 0, -0.5f);
 				debugSpider1.ModelIntensity = 1;
+				debugSpider1.Roaming = RoamingMode.Walk;
 			}
 
 			if (DEBUG_BEES_ON)
             {
 				Vec3 position = new Vec3(0, 0, -1f);
 				debugBee1.Init();
-				debugBee1.RoamingEnabled = true;
 				debugBee1.SetPosition(position);
 				debugBee1.ModelIntensity = 4;
 				debugBee1.SoundEnabled = true;
+				debugBee1.Roaming = RoamingMode.Fly;
 			}
 		}
 
