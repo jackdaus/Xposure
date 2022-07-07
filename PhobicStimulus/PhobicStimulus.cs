@@ -40,7 +40,7 @@ namespace StereoKitApp
         /// <summary>
         /// How the model is moving on its own
         /// </summary>
-        public RoamingMode Roaming { get; set; }
+        public Roaming RoamingMode { get; set; }
 
         /// <summary>
         /// Level of realism of the model
@@ -137,7 +137,7 @@ namespace StereoKitApp
         private void roam()
         {
             // Roaming movement
-            if (Roaming == RoamingMode.Walk)
+            if (RoamingMode == Roaming.Walk)
             {
                 if (_isWalking)
                 {
@@ -169,7 +169,7 @@ namespace StereoKitApp
                     _lastWalkingChange = DateTime.Now;
                 }
             }
-            else if (Roaming == RoamingMode.Fly)
+            else if (RoamingMode == Roaming.Fly)
             {
                 Pose solidPose = _solid.GetPose();
                 Vec3 forwardPose = solidPose.Forward;
@@ -315,7 +315,7 @@ namespace StereoKitApp
                 ModelIntensity++;
 
             UI.Label($"Type: {GetType()}");
-            UI.Label($"Roaming: {Roaming}");
+            UI.Label($"Roaming: {RoamingMode}");
             UI.Label($"Position: {_solid.GetPose().position}");
 
             float scaleVal = Scale;

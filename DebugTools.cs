@@ -32,7 +32,7 @@ namespace StereoKitApp
 				debugSpider1.PhysicsEnabled = false;
 				debugSpider1.SetPosition(0f, 0, -0.5f);
 				debugSpider1.ModelIntensity = 1;
-				debugSpider1.Roaming = RoamingMode.Walk;
+				debugSpider1.RoamingMode = Roaming.Walk;
 			}
 
 			if (DEBUG_BEES_ON)
@@ -42,7 +42,7 @@ namespace StereoKitApp
 				debugBee1.SetPosition(position);
 				debugBee1.ModelIntensity = 4;
 				debugBee1.SoundEnabled = true;
-				debugBee1.Roaming = RoamingMode.Fly;
+				debugBee1.RoamingMode = Roaming.Fly;
 			}
 		}
 

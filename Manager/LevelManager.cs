@@ -7,7 +7,7 @@ namespace StereoKitApp
 {
     internal class LevelManager
     {
-        private PhobiaType? _selectedPhobiaType;
+        private Phobia? _selectedPhobiaType;
         private IScene _scene;
         private int _currentSceneLevel = 1;
         private Pose _windowPose = new Pose(-0.3f, 0, -0.3f, Quat.LookDir(1, 0, 1));
@@ -50,10 +50,10 @@ namespace StereoKitApp
             {
                 UI.Label("Start a scenario");
                 if (UI.Button("Spider"))    
-                    initScene(PhobiaType.Spider);
+                    initScene(Phobia.Spider);
                 UI.SameLine();
                 if (UI.Button("Bee"))       
-                    initScene(PhobiaType.Bee);
+                    initScene(Phobia.Bee);
 
                 // Quit button
                 UI.HSeparator();
@@ -61,6 +61,10 @@ namespace StereoKitApp
                     if (UI.ButtonRound("shut_down", Asset.Instance.IconPower))
                         SK.Quit();
                 UI.PopTint();
+
+                UI.SameLine();
+                if (UI.Button("Credits"))
+                    App.CreditsStepper.Enabled = !App.CreditsStepper.Enabled;
 
                 // View report button
                 if (_history.Any() && !_report.IsVisible())
@@ -111,7 +115,7 @@ namespace StereoKitApp
             UI.WindowEnd();
         }
 
-        private void initScene(PhobiaType type)
+        private void initScene(Phobia type)
         {
             if (_selectedPhobiaType != null)
                 throw new InvalidOperationException("Scene already in progress! Cannot begin a new scene.");
@@ -123,10 +127,10 @@ namespace StereoKitApp
 
             switch (type)
             {
-                case PhobiaType.Spider:
+                case Phobia.Spider:
                     _scene = new SpidersScene(_history);
                     break;
-                case PhobiaType.Bee:
+                case Phobia.Bee:
                     _scene = new BeeScene(_history);
                     break;
             }

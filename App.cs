@@ -6,11 +6,12 @@ namespace StereoKitApp
 	public class App
 	{
 		public SKSettings Settings => new SKSettings { 
-			appName           = "XposuRe Therapy",
+			appName           = "Xposure Therapy",
 			assetsFolder      = "Assets",
 			displayPreference = DisplayMode.MixedReality
 		};
 		public static PassthroughFBExt Passthrough;
+		internal static Credits CreditsStepper = SK.AddStepper(new Credits());
 
 		Matrix floorTransform;
 		Material floorMaterial;

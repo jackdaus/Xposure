@@ -4,10 +4,10 @@ using System.Text;
 
 namespace StereoKitApp
 {
-    public enum RoamingMode
+    public enum Phobia
     {
-        None,
-        Walk,
-        Fly
+        Spider,
+        Bee,
+        Claustrophobia,
     }
 }

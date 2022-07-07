@@ -10,15 +10,11 @@ namespace StereoKitApp
         Pose _pose;
         bool _windowVisible;
 
-        Color Red = new Color(1f, 0, 0); // TODO move to shared area
-
         public void MakeVisible(Pose basePose)
         {
-            var reportPose = basePose;
-            // TODO put window in a better location
-            reportPose.position.x += 0.1f;
-
-            _pose = reportPose; 
+            Vec3 windowPosition = Input.Head.position + Input.Head.Forward * 0.3f;
+            Quat lookAt = Quat.LookAt(windowPosition, Input.Head.position);
+            _pose = new Pose(windowPosition, lookAt);
             _windowVisible = true;
         }
 

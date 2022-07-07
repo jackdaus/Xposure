@@ -55,7 +55,7 @@ namespace StereoKitApp
                     _bees.ForEach(b =>
                     {
                         b.ModelIntensity = 1;
-                        b.Roaming = RoamingMode.None;
+                        b.RoamingMode = Roaming.None;
                         b.SoundEnabled = false;
                     });
 
@@ -69,7 +69,7 @@ namespace StereoKitApp
                     _bees.ForEach(b =>
                     {
                         b.ModelIntensity = 2;
-                        b.Roaming = RoamingMode.None;
+                        b.RoamingMode = Roaming.None;
                         b.SoundEnabled = false;
                     });
 
@@ -85,7 +85,7 @@ namespace StereoKitApp
                     _bees.ForEach(b =>
                     {
                         b.ModelIntensity = 2;
-                        b.Roaming = RoamingMode.Fly;
+                        b.RoamingMode = Roaming.Fly;
                         b.SoundEnabled = false;
                     });
 
@@ -99,7 +99,7 @@ namespace StereoKitApp
                     _bees.ForEach(b =>
                     {
                         b.ModelIntensity = 3;
-                        b.Roaming = RoamingMode.Fly;
+                        b.RoamingMode = Roaming.Fly;
                         b.SoundEnabled = false;
                     });
 
@@ -113,7 +113,7 @@ namespace StereoKitApp
                     _bees.ForEach(b =>
                     {
                         b.ModelIntensity = 4;
-                        b.Roaming = RoamingMode.Fly;
+                        b.RoamingMode = Roaming.Fly;
                         b.SoundEnabled = false;
                     });
 
@@ -127,7 +127,7 @@ namespace StereoKitApp
                     _bees.ForEach(b =>
                     {
                         b.ModelIntensity = 4;
-                        b.Roaming = RoamingMode.Fly;
+                        b.RoamingMode = Roaming.Fly;
                         b.SoundEnabled = true;
                     });
 
