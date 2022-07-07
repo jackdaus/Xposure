@@ -47,12 +47,21 @@ namespace StereoKitApp
             models.Add(beeModel);
 
             // Sound
-            // TODO I don't think this works with multiple instances of bees... the sound gets stomped by the other instances
+            // TODO This doesn't works with multiple instances of bees...
+            // ... the sound will get stomped by the other instances
             _buzzSound = Asset.Instance.BeeBuzz;
             _loopTimer = new Timer(Asset.Instance.BeeBuzz.Duration * 1000);
             _loopTimer.Elapsed += OnLoopEvent;
             _loopTimer.AutoReset = true;
         }
+
+        public override void Step()
+        {
+            base.Step();
+            if (_soundEnabled)
+                _currentSound.Position = GetPosition();
+        }
+
 
         public bool SoundEnabled
         {
@@ -61,16 +70,14 @@ namespace StereoKitApp
             {
                 if (value)
                 {
-                    _loopTimer.Enabled = true;
-                    _soundEnabled = true;
-
-                    // TODO update position as bee moves
-                    _currentSound = _buzzSound.Play(GetPosition());
+                    _loopTimer.Enabled  = true;
+                    _soundEnabled       = true;
+                    _currentSound       = _buzzSound.Play(GetPosition());
                 }
                 else
                 {
-                    _loopTimer.Enabled= false;
-                    _soundEnabled = false;
+                    _loopTimer.Enabled  = false;
+                    _soundEnabled       = false;
 
                     // Stop playing the current sound if there is one playing
                     _currentSound.Stop();

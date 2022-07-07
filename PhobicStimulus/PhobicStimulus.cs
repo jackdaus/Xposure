@@ -101,7 +101,7 @@ namespace StereoKitApp
         /// <summary>
         /// Step the phobic stimulus.
         /// </summary>
-        public void Step()
+        public virtual void Step()
         {
             roam();
 
