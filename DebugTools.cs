@@ -8,11 +8,11 @@ namespace StereoKitApp
 		/// <summary>
 		/// Conveiently toggle the debug tools on/off here!
 		/// </summary>
-		public static bool DEBUG_TOOLS_ON				= true;
+		public static bool DEBUG_TOOLS_ON				= false;
 
 		// These must be readonly since they are tied to the Init event
 		public readonly static bool DEBUG_SPIDERS_ON	= false;
-		public readonly static bool DEBUG_BEES_ON		= true;
+		public readonly static bool DEBUG_BEES_ON		= false;
 
 		private static Pose logPose = new Pose(1, 0, -0.5f, Quat.LookDir(-1, 0, 1));
 		private static List<string> logList = new List<string>();

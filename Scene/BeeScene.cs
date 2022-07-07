@@ -51,36 +51,37 @@ namespace StereoKitApp
             switch (level)
             {
                 case 1:
-                    // Level 1: One stationary M1 bee
+                    // Start basic. Just a solitary stationary sphere.
                     _bees.ForEach(b =>
                     {
                         b.ModelIntensity = 1;
                         b.Roaming = RoamingMode.None;
+                        b.SoundEnabled = false;
                     });
 
                     // Objectives
                     _objectives.Clear();
-                    _objectives.Add(new WaitObjective(5));
+                    _objectives.Add(new LookObjective(5));
 
                     break;
                 case 2:
-                    // Level 2: One roaming M1 bee
+                    // Increase model realism.
                     _bees.ForEach(b =>
                     {
-                        b.ModelIntensity = 4;
-                        b.Roaming = RoamingMode.Fly;
-                        b.SoundEnabled = true;
+                        b.ModelIntensity = 2;
+                        b.Roaming = RoamingMode.None;
+                        b.SoundEnabled = false;
                     });
 
                     // Objectives
                     _objectives.Clear();
-                    _objectives.Add(new DistanceObjective(0.5f));
-                    _objectives.Add(new TouchObjective(1));
+                    _objectives.Add(new LookObjective(8));
+                    _objectives.Add(new DistanceObjective(1f));
 
                     break;
 
                 case 3:
-                    // Level 3: One roaming M5 bee
+                    // Add motion.
                     _bees.ForEach(b =>
                     {
                         b.ModelIntensity = 2;
@@ -90,21 +91,49 @@ namespace StereoKitApp
 
                     // Objectives
                     _objectives.Clear();
-                    _objectives.Add(new WaitObjective(5));
+                    _objectives.Add(new LookObjective(5));
 
                     break;
                 case 4:
-                    // Level 4: One roaming M4 bee
+                    // Increase model realism
                     _bees.ForEach(b =>
                     {
-                        b.ModelIntensity = 4;
+                        b.ModelIntensity = 3;
                         b.Roaming = RoamingMode.Fly;
+                        b.SoundEnabled = false;
                     });
 
                     // Objectives
                     _objectives.Clear();
-                    _objectives.Add(new WaitObjective(7));
-                    _objectives.Add(new TouchObjective(2));
+                    _objectives.Add(new WaitObjective(5));
+
+                    break;
+                case 5:
+                    // Increase model realism
+                    _bees.ForEach(b =>
+                    {
+                        b.ModelIntensity = 4;
+                        b.Roaming = RoamingMode.Fly;
+                        b.SoundEnabled = false;
+                    });
+
+                    // Objectives
+                    _objectives.Clear();
+                    _objectives.Add(new LookObjective(5));
+
+                    break;
+                case 6:
+                    // Add sound
+                    _bees.ForEach(b =>
+                    {
+                        b.ModelIntensity = 4;
+                        b.Roaming = RoamingMode.Fly;
+                        b.SoundEnabled = true;
+                    });
+
+                    // Objectives
+                    _objectives.Clear();
+                    _objectives.Add(new TouchObjective(1));
 
                     break;
                 default:
@@ -114,7 +143,7 @@ namespace StereoKitApp
 
         public int GetMaxLevel()
         {
-            return 4; 
+            return 6;
         }
 
         public void Destroy()

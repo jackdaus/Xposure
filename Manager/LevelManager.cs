@@ -106,10 +106,6 @@ namespace StereoKitApp
                 UI.HSeparator();
                 if (UI.Button("Exit")) 
                     stopScene();
-
-                TimeSpan currentLevelTime = _history.GetCurrentLevelTime();
-                UI.SameLine();
-                UI.Label($"{currentLevelTime.Minutes}m {currentLevelTime.Seconds}s");
             }
 
             UI.WindowEnd();

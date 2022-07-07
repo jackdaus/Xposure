@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace StereoKitApp.Objective
+namespace StereoKitApp
 {
-    internal class LookObjective : IObjective
+    internal struct LookObjective : IObjective
     {
         public int Seconds { get; set; }
 

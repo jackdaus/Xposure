@@ -30,7 +30,7 @@ namespace StereoKitApp
 
         public string Description(SessionHistory history)
         {
-            return $"Get within {Distance} {(Distance == 1 ? "meter" : "meters")} of the object";
+            return $"Put head within {Distance} {(Distance == 1 ? "meter" : "meters")} of the object";
         }
 
         public bool IsCompleted(SessionHistory history)
