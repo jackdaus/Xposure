@@ -144,9 +144,24 @@ namespace StereoKitApp
             LevelHistory current = GetCurrentLevelHistory();
 
             // Filter for the TimePeriods that started during the current level OR carried over from the previous level
-            return _looks
+            var currentLooks = _looks
                 .Where(l => l.Begin > current.Begin || (l.Begin < current.Begin && (l.End ?? DateTime.Now) > current.Begin))
                 .ToList();
+
+            var currentHistory = GetCurrentLevelHistory();
+
+            // Fix-up the begin times if they were carried over from the previous level
+            // TODO apply this fix-up to the other TimePeriod getters... or maybe find something more efficient?
+            List<TimePeriod> looksFixed = new List<TimePeriod>();
+            currentLooks.ForEach(l =>
+            {
+                if (l.Begin < currentHistory.Begin)
+                    l.Begin = currentHistory.Begin;
+
+                looksFixed.Add(l);
+            });
+
+            return looksFixed;
         }
 
         public List<TimePeriod> GetCurrentLevelHoldTimePeriods()
