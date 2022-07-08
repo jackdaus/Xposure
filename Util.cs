@@ -23,7 +23,7 @@ namespace StereoKitApp
         }
 
         // To add more characters, see http://modernicons.io/segoe-mdl2/cheatsheet/
-        // These characters work with the current version of StereoKit
+        // These characters work with the current version of StereoKit running on Windows
         public static class SpecialChars
         {
             /// <summary>

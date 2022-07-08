@@ -56,7 +56,7 @@ namespace StereoKitApp
                 UI.PushTextStyle(_style);
                 UI.Label("Bee Buzz Sound");
                 UI.PopTextStyle();
-                UI.Label("By https://quicksounds.com/");
+                UI.Label("By https://quicksounds.com/sound/2760/bumblebee-1");
 
                 UI.PushTextStyle(_style);
                 UI.Label("Realistic Bee Model");

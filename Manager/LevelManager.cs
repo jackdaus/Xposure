@@ -90,6 +90,16 @@ namespace StereoKitApp
             else
             {
                 UI.Label($"Level {_currentSceneLevel} out of {_scene.GetMaxLevel()}");
+
+                // Always show the Up button during debug for easier testing (but make it gray to distinguish it)
+                if (App.DebugToolsStepper.Enabled && _currentSceneLevel < _scene.GetMaxLevel())
+                {
+                    UI.SameLine();
+                    if (UI.ButtonRound("Up", Asset.Instance.IconUp))
+                        changeLevel(_currentSceneLevel + 1);
+                }
+
+                // Real up button
                 if (_scene.AllObjectivesComplete() && _currentSceneLevel < _scene.GetMaxLevel())
                 {
                     UI.SameLine();

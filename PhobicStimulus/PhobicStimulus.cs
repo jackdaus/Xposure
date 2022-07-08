@@ -15,12 +15,13 @@ namespace StereoKitApp
         private Model _activeModel;
         private int _maxModelLevel { get => models.Count - 1; }
         private bool _isHeld;
+        private bool _animationEnabled;
 
-        // used for RoamingMode.Walk
+        // used for Roaming.Walk
         private DateTime _lastWalkingChange = DateTime.Now;
         private bool _isWalking = true;
 
-        // used for RoamingMode.Fly
+        // used for Roaming.Fly
         private float _flightTheta = 0;
 
         // debug
@@ -31,6 +32,19 @@ namespace StereoKitApp
         /// Enable or disable the model's physics simulation.
         /// </summary>
         public bool PhysicsEnabled { get; set; }
+
+        /// <summary>
+        /// Enable or disable the model's animation.
+        /// </summary>
+        public bool AnimationEnabled 
+        { 
+            get => _animationEnabled; 
+            set
+            {
+                _animationEnabled = value;
+                syncAnimation();
+            }
+        }
 
         /// <summary>
         /// Size of the model
@@ -272,9 +286,12 @@ namespace StereoKitApp
             return _isHeld;
         }
 
+        /// <summary>
+        /// Synchronize the animation with the current activity of the model
+        /// </summary>
         private void syncAnimation()
         {
-            // last spider level has animations
+            // last model intensity has animations
             if (_modelIntensity == _maxModelLevel)
             {
                 // TODO this probably isn't a good use of reflection! 
@@ -282,17 +299,30 @@ namespace StereoKitApp
                 Type thisType = GetType();
                 if (thisType == typeof(Spider))
                 {
-                    if (_isWalking)
-                        _activeModel.PlayAnim("walk_ani_vor", AnimMode.Loop);
+                    if (AnimationEnabled)
+                    {
+                        if (_isWalking)
+                            _activeModel.PlayAnim("walk_ani_vor", AnimMode.Loop);
+                        else
+                            _activeModel.PlayAnim("warte_pose", AnimMode.Loop);
+                    }
                     else
-                        _activeModel.PlayAnim("warte_pose", AnimMode.Loop);
+                    {
+                        // I think using AnimMode.Manual will stop the animation?
+                        _activeModel.PlayAnim("warte_pose", AnimMode.Manual);
+                    }
                 }
-                else if(thisType == typeof(Bee))
+                else if (thisType == typeof(Bee))
                 {
-                    if (_isWalking)
+                    if (AnimationEnabled)
+                    {
                         _activeModel.PlayAnim("_bee_hover", AnimMode.Loop);
+                    }
                     else
-                        _activeModel.PlayAnim("_bee_idle", AnimMode.Loop);
+                    {
+                        // I think using AnimMode.Manual will stop the animation?
+                        _activeModel.PlayAnim("_bee_hover", AnimMode.Manual);
+                    }
                 }
             }
         }

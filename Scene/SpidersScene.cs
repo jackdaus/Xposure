@@ -8,13 +8,13 @@ namespace StereoKitApp
 {
     public class SpidersScene : IScene
     {
-        private List<Spider> _spiders = new List<Spider>();
-        private List<IObjective> _objectives = new List<IObjective>();
+        private List<Spider> _spiders           = new List<Spider>();
+        private List<IObjective> _objectives    = new List<IObjective>();
 
         // TODO turn this into a service?
         private SessionHistory _sessionHistory;
 
-        // Hide the no-parameter constructor for now
+        // Hide the no-parameter constructor for now (since we need SessionHistory obj)
         private SpidersScene() { }
 
         public SpidersScene(SessionHistory history)
@@ -28,7 +28,7 @@ namespace StereoKitApp
             Spider spider = new Spider();
             spider.Init();
 
-            Vec3 position = new Vec3(0.25f, Util.FloorHeight + 0.05f, 0);
+            Vec3 position = new Vec3(0.25f, Util.FloorHeight + 0.05f, -1.2f);
 
             spider.SetPosition(position);
             spider.PhysicsEnabled = true;
@@ -45,13 +45,16 @@ namespace StereoKitApp
 
         public void SetCurrentLevel(int level)
         {
+            if (level < 1)
+                throw new ArgumentOutOfRangeException();
+
             if (level > GetMaxLevel())
                 throw new ArgumentOutOfRangeException();
 
             switch (level)
             {
                 case 1:
-                    // Level 1: One stationary M1 spider
+                    // Start with the most simple model
                     _spiders.ForEach(sp =>
                     {
                         sp.ModelIntensity = 1;
@@ -60,14 +63,85 @@ namespace StereoKitApp
 
                     // Objectives
                     _objectives.Clear();
-                    _objectives.Add(new WaitObjective(2));
-                    //_objectives.Add(new DistanceObjective(0.5f));
-                    _objectives.Add(new TouchObjective(1));
-                    _objectives.Add(new PickUpObjective());
+                    _objectives.Add(new LookObjective(5));
 
                     break;
                 case 2:
-                    // Level 2: One roaming M1 spider
+                    // Increase model realism
+                    _spiders.ForEach(sp =>
+                    {
+                        sp.ModelIntensity = 2;
+                        sp.RoamingMode = Roaming.None;
+                    });
+
+                    // Objectives
+                    _objectives.Clear();
+                    _objectives.Add(new DistanceObjective(1f));
+
+                    break;
+
+                case 3:
+                    // Increase model realism
+                    _spiders.ForEach(sp =>
+                    {
+                        sp.ModelIntensity = 3;
+                        sp.RoamingMode = Roaming.None;
+                    });
+
+                    // Objectives
+                    _objectives.Clear();
+                    _objectives.Add(new LookObjective(5));
+                    _objectives.Add(new TouchObjective(2));
+
+                    break;
+
+                case 4:
+                    // Increase model realism. Add motion
+                    _spiders.ForEach(sp =>
+                    {
+                        sp.ModelIntensity = 5;
+                        sp.RoamingMode = Roaming.Walk;
+                    });
+
+                    // Objectives
+                    _objectives.Clear();
+                    _objectives.Add(new PickUpObjective());
+                    _objectives.Add(new DistanceObjective(0.2f));
+
+                    break;
+
+                case 5:
+                    // Increase model realism
+                    _spiders.ForEach(sp =>
+                    {
+                        sp.ModelIntensity = 8;
+                        sp.RoamingMode = Roaming.Walk;
+                    });
+
+                    // Objectives
+                    _objectives.Clear();
+                    _objectives.Add(new LookObjective(5));
+                    _objectives.Add(new TouchObjective(2));
+
+                    break;
+
+                case 6:
+                    // Increase model realism. Remove motion
+                    _spiders.ForEach(sp =>
+                    {
+                        sp.ModelIntensity = 9;
+                        sp.RoamingMode = Roaming.None;
+                    });
+
+                    // Objectives
+                    _objectives.Clear();
+                    _objectives.Add(new LookObjective(5));
+                    _objectives.Add(new DistanceObjective(1));
+
+                    break;
+
+                case 7:
+                    // Increase model realism. Remove motion
                     _spiders.ForEach(sp =>
                     {
                         sp.ModelIntensity = 9;
@@ -76,38 +150,23 @@ namespace StereoKitApp
 
                     // Objectives
                     _objectives.Clear();
-                    _objectives.Add(new WaitObjective(1));
-                    _objectives.Add(new LookObjective(10));
-
-                    //_objectives.Add(new TouchObjective(1));
+                    _objectives.Add(new PickUpObjective());
 
                     break;
 
-                //case 3:
-                //    // Level 3: One roaming M5 spider
-                //    _spiders.ForEach(sp =>
-                //    {
-                //        sp.ModelIntensity = 5;
-                //        sp.RoamingOn = true;
-                //    });
+                case 8:
+                    // Increase model realism. Remove motion
+                    _spiders.ForEach(sp =>
+                    {
+                        sp.ModelIntensity = 9;
+                        sp.RoamingMode = Roaming.Walk;
+                        sp.AnimationEnabled = true;
+                    });
 
-                //    // Objectives
-                //    _objectives.Clear();
-                //    _objectives.Add(new WaitObjective(5));
-
-                //    break;
-                //case 4:
-                //    // Level 4: One roaming M9 spider
-                //    _spiders.ForEach(sp =>
-                //    {
-                //        sp.ModelIntensity = 9;
-                //        sp.RoamingOn = true;
-                //    });
-
-                //    // Objectives
-                //    _objectives.Clear();
-                //    _objectives.Add(new WaitObjective(7));
-                //    _objectives.Add(new TouchObjective(2));
+                    // Objectives
+                    _objectives.Clear();
+                    _objectives.Add(new DistanceObjective(0.1f));
+                    _objectives.Add(new PickUpObjective());
 
                     break;
                 default:
@@ -117,7 +176,7 @@ namespace StereoKitApp
 
         public int GetMaxLevel()
         {
-            return 2; 
+            return 8;
         }
 
         public void Destroy()
