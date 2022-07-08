@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 using StereoKit;
+using StereoKit.Framework;
 
 namespace StereoKitApp
 {
-    internal class LevelManager
+    internal class LevelManager : IStepper
     {
         private Phobia? _selectedPhobiaType;
         private IScene _scene;
@@ -13,12 +14,23 @@ namespace StereoKitApp
         private Pose _windowPose = new Pose(-0.3f, 0, -0.3f, Quat.LookDir(1, 0, 1));
         private SessionHistory _history = new SessionHistory();
         private Report _report = new Report();
-        private bool _wasJustTouching   = false;
-        private bool _wasJustLooking    = false;
-        private bool _wasJustHolding    = false;
+        private bool _wasJustTouching = false;
+        private bool _wasJustLooking = false;
+        private bool _wasJustHolding = false;
 
         public LevelManager()
         { 
+        }
+
+        public bool Enabled { get; }
+
+        public bool Initialize()
+        {
+            return true;
+        }
+
+        public void Shutdown()
+        {
         }
 
         public void Step()

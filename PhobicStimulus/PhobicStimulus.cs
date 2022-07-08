@@ -124,7 +124,7 @@ namespace StereoKitApp
             _solid.Teleport(sPose.position, sPose.orientation);
             _activeModel.Draw(sPose.ToMatrix(Scale));
 
-            if (DebugTools.DEBUG_TOOLS_ON)
+            if (App.DebugToolsStepper.Enabled)
             {
                 debugExtras();
             }
