@@ -11,6 +11,10 @@ namespace StereoKitApp
 			displayPreference = DisplayMode.MixedReality
 		};
 		public static PassthroughFBExt Passthrough;
+		
+		// Quick fix for different font files
+		public static bool IsAndroid;
+		
 		internal static Credits CreditsStepper				= SK.AddStepper(new Credits());
 		internal static LevelManager LevelManagerStepper	= SK.AddStepper(new LevelManager());
 		internal static DebugTools DebugToolsStepper		= SK.AddStepper(new DebugTools());

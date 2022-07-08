@@ -69,6 +69,7 @@ namespace StereoKit_Android
 				settings.androidActivity = activityHandle;
 				if (!SK.Initialize(settings))
 					return;
+				App.IsAndroid = true;
 				app.Init();
 
 				// Now loop until finished, and then shut down

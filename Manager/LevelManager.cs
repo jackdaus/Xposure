@@ -112,8 +112,17 @@ namespace StereoKitApp
                 UI.Label("Objectives:");
                 _scene.GetObjectives().ForEach(o =>
                 {
-                    UI.Label((o.IsCompleted(_history) ? Util.SpecialChars.CheckboxCompositeReversed : Util.SpecialChars.Checkbox)
-                        + $"\t{ o.Description(_history)}");
+                    // Quick fix to fallback when MDL2 symbols are not available
+                    if (App.IsAndroid)
+                    {
+                        UI.Label((o.IsCompleted(_history) ? "[ x ]" : "[   ]")
+                            + $"\t{ o.Description(_history)}");
+                    }
+                    else
+                    {
+                        UI.Label((o.IsCompleted(_history) ? Util.SpecialChars.CheckboxCompositeReversed : Util.SpecialChars.Checkbox)
+                            + $"\t{ o.Description(_history)}");
+                    }
                 });
 
                 // View Report
