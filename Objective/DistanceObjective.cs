@@ -30,7 +30,7 @@ namespace StereoKitApp
 
         public string Description(SessionHistory history)
         {
-            if (Distance > 1)
+            if (Distance >= 1)
                 return $"Get within {Distance} {(Distance == 1 ? "meter" : "meters")} of the object";
 
             return $"Put face within {Distance * 100} centimeters of the object";

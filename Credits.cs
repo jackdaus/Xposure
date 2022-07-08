@@ -47,21 +47,28 @@ namespace StereoKitApp
                 if (UI.Button("Close"))
                     Enabled = false;
 
+                UI.HSeparator();
+
                 UI.PushTextStyle(_style);
                 UI.Label("Approximate Spider Models");
                 UI.PopTextStyle();
                 UI.Label("Created by Brianna Baker");
 
+                UI.HSeparator();
 
                 UI.PushTextStyle(_style);
                 UI.Label("Bee Buzz Sound");
                 UI.PopTextStyle();
                 UI.Label("By https://quicksounds.com/sound/2760/bumblebee-1");
 
+                UI.HSeparator();
+
                 UI.PushTextStyle(_style);
                 UI.Label("Realistic Bee Model");
                 UI.PopTextStyle();
                 UI.Label("Exported from Microsoft 3D Viewer");
+
+                UI.HSeparator();
 
                 UI.PushTextStyle(_style);
                 UI.Label("Realistic Spider Model");

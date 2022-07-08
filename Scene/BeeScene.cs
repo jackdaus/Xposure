@@ -75,8 +75,8 @@ namespace StereoKitApp
 
                     // Objectives
                     _objectives.Clear();
-                    _objectives.Add(new LookObjective(8));
                     _objectives.Add(new DistanceObjective(1f));
+                    _objectives.Add(new PickUpObjective());
 
                     break;
 
@@ -95,12 +95,12 @@ namespace StereoKitApp
 
                     break;
                 case 4:
-                    // Increase model realism
+                    // Increase model realism and add sound
                     _bees.ForEach(b =>
                     {
                         b.ModelIntensity = 3;
                         b.RoamingMode = Roaming.Fly;
-                        b.SoundEnabled = false;
+                        b.SoundEnabled = true;
                     });
 
                     // Objectives
@@ -114,26 +114,13 @@ namespace StereoKitApp
                     {
                         b.ModelIntensity = 4;
                         b.RoamingMode = Roaming.Fly;
-                        b.SoundEnabled = false;
+                        b.SoundEnabled = true;
+                        b.AnimationEnabled = true;
                     });
 
                     // Objectives
                     _objectives.Clear();
                     _objectives.Add(new LookObjective(5));
-
-                    break;
-                case 6:
-                    // Add sound
-                    _bees.ForEach(b =>
-                    {
-                        b.ModelIntensity = 4;
-                        b.RoamingMode = Roaming.Fly;
-                        b.SoundEnabled = true;
-                    });
-
-                    // Objectives
-                    _objectives.Clear();
-                    _objectives.Add(new TouchObjective(1));
 
                     break;
                 default:
@@ -143,7 +130,7 @@ namespace StereoKitApp
 
         public int GetMaxLevel()
         {
-            return 6;
+            return 5;
         }
 
         public void Destroy()

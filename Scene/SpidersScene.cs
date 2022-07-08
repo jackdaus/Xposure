@@ -165,8 +165,8 @@ namespace StereoKitApp
 
                     // Objectives
                     _objectives.Clear();
-                    _objectives.Add(new DistanceObjective(0.1f));
                     _objectives.Add(new PickUpObjective());
+                    _objectives.Add(new DistanceObjective(0.2f));
 
                     break;
                 default:

@@ -23,7 +23,7 @@ namespace StereoKitApp
 		{
 			// Create assets used by the app
 			Vec3 floorPosition = new Vec3(0, Util.FloorHeight, 0);
-			floorTransform = Matrix.TS(floorPosition, new Vec3(30, 0.1f, 30));
+			floorTransform = Matrix.TS(floorPosition, new Vec3(30, 0f, 30));
 			floorMaterial = new Material(Shader.FromFile("floor.hlsl"));
 			floorMaterial.Transparency = Transparency.Blend;
 

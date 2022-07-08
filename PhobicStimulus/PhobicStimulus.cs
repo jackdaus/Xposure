@@ -346,8 +346,8 @@ namespace StereoKitApp
 
             UI.Label($"Type: {GetType()}");
             UI.Label($"Roaming: {RoamingMode}");
-            UI.Label($"Position: {_solid.GetPose().position}");
-
+            UI.Label($"Position: {GetPosition()}");
+            UI.Label($"Distance: {Vec3.Distance(GetPosition(), Input.Head.position)}");
             float scaleVal = Scale;
             UI.Label($"Scale: {scaleVal}");
             UI.HSlider($"Scale_{_id}", ref scaleVal, 0, 10, 0.01f);

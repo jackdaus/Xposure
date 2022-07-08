@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using StereoKit;
 
@@ -40,7 +41,6 @@ namespace StereoKitApp
                 {
                     TimeSpan ts = s.GetTimeSpan();
                     UI.Label($"Level {s.Level}: {ts.Minutes}m {ts.Seconds}s");
-                    UI.Label($"MinDistance: {s.MinDistance}");
                 });
 
 
@@ -48,19 +48,23 @@ namespace StereoKitApp
 
                 UI.Label($"Total touches: {touches.Count}");
 
-                touches.ForEach(t =>
+                touches.Take(3).ToList().ForEach(t =>
                 {
-                    UI.Label($"Start: {t.Begin} End: {t.End}");
+                    UI.Label($"{t.Begin.ToLongTimeString()} - {t.End?.ToLongTimeString()}");
                 });
+                if (touches.Count > 3)
+                    UI.Label("...");
 
                 List<TimePeriod> looks = history.GetLookTimePeriods();
 
                 UI.Label($"Total looks: {looks.Count}");
 
-                looks.ForEach(t =>
+                looks.Take(3).ToList().ForEach(t =>
                 {
-                    UI.Label($"Start: {t.Begin} End: {t.End}");
+                    UI.Label($"{t.Begin.ToLongTimeString()} - {(t.End.HasValue ? t.End.Value.ToLongTimeString() : "Present")}");
                 });
+                if (touches.Count > 3)
+                    UI.Label("...");
 
                 UI.WindowEnd();
             }

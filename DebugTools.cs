@@ -10,12 +10,12 @@ namespace StereoKitApp
 		private readonly bool DEBUG_SPIDERS_ON	= false;
 		private readonly bool DEBUG_BEES_ON		= false;
 
-		private Pose logPose = new Pose(1, 0, -0.5f, Quat.LookDir(-1, 0, 1));
-		private List<string> logList = new List<string>();
-		private string logText = "";
+		private Pose _logPose = new Pose(1, 0, -0.5f, Quat.LookDir(-1, 0, 1));
+		private List<string> _logList = new List<string>();
+		private string _logText = "";
 
-		private static Spider debugSpider1	= new Spider();
-		private static Bee debugBee1		= new Bee();
+		private static Spider _spider	= new Spider();
+		private static Bee _bee			= new Bee();
 
 		/// <summary>
 		/// Enable the debug tools by changing this
@@ -28,22 +28,23 @@ namespace StereoKitApp
 
 			if (DEBUG_SPIDERS_ON)
 			{
-				debugSpider1.Init();
-				debugSpider1.PhysicsEnabled = false;
-				debugSpider1.SetPosition(0f, 0, -0.5f);
-				debugSpider1.ModelIntensity = 1;
-				debugSpider1.RoamingMode = Roaming.None;
+				_spider.Init();
+				_spider.PhysicsEnabled = true;
+				_spider.SetPosition(0f, 0, -0.5f);
+				_spider.ModelIntensity = 9;
+				_spider.RoamingMode = Roaming.Walk;
+				_spider.AnimationEnabled = true;
 			}
 
 			if (DEBUG_BEES_ON)
 			{
 				Vec3 position = new Vec3(0, 0, -1f);
-				debugBee1.Init();
-				debugBee1.SetPosition(position);
-				debugBee1.ModelIntensity = 4;
-				debugBee1.SoundEnabled = true;
-				debugBee1.RoamingMode = Roaming.Fly;
-				debugBee1.AnimationEnabled = true;
+				_bee.Init();
+				_bee.SetPosition(position);
+				_bee.ModelIntensity = 4;
+				_bee.SoundEnabled = true;
+				_bee.RoamingMode = Roaming.Fly;
+				_bee.AnimationEnabled = true;
 			}
 
 			return true;
@@ -63,12 +64,12 @@ namespace StereoKitApp
 
 			if (DEBUG_SPIDERS_ON)
             {
-				debugSpider1.Step();
+				_spider.Step();
             }
 
 			if (DEBUG_BEES_ON)
 			{
-				debugBee1.Step();
+				_bee.Step();
 			}
 		}
 
@@ -108,19 +109,19 @@ namespace StereoKitApp
 
 		private void onLog(LogLevel level, string text)
 		{
-			if (logList.Count > 15)
-				logList.RemoveAt(logList.Count - 1);
-			logList.Insert(0, text.Length < 100 ? text : text.Substring(0, 100) + "...\n");
+			if (_logList.Count > 15)
+				_logList.RemoveAt(_logList.Count - 1);
+			_logList.Insert(0, text.Length < 100 ? text : text.Substring(0, 100) + "...\n");
 
-			logText = "";
-			for (int i = 0; i < logList.Count; i++)
-				logText += logList[i];
+			_logText = "";
+			for (int i = 0; i < _logList.Count; i++)
+				_logText += _logList[i];
 		}
 
 		private void logWindow()
 		{
-			UI.WindowBegin("Log", ref logPose, new Vec2(40, 0) * U.cm);
-			UI.Text(logText);
+			UI.WindowBegin("Log", ref _logPose, new Vec2(40, 0) * U.cm);
+			UI.Text(_logText);
 			UI.HSeparator();
 			float fps = 1 / Time.Elapsedf;
 			UI.Text($"FPS: {fps}");
