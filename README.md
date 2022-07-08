@@ -1,6 +1,9 @@
 # Xposure Therapy
 A mixed reality therapy for phobia disorders. Developed using StereoKit.
 
+# Demo
+See a demo of the app at https://www.youtube.com/watch?v=GgPz8Zy8L2A
+
 # How to run
 ## To run on desktop
 Set StereoKit_DotNet as the startup project. 
